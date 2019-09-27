@@ -336,7 +336,7 @@ public class MGoods {
         defaultTableModel.setRowCount(0);
 
         //列表分页
-        Page page = new Page(tableRows);
+        Page page = new Page<Goods>(tableRows);
         List<Goods> list =  page.cutList(currentPage, goodsList);
 
         for(Goods goods : list){
