@@ -26,7 +26,7 @@ public class MGoods {
     private JButton lastPageButton;
     private JFrame mainFrame;
     private int currentPage;
-    private int fristPage;
+    private int firstPage;
     private int lastPage;
     private int tableRows;
     private List<Goods> goodsList;
@@ -49,7 +49,7 @@ public class MGoods {
         //设置表格
         String[] columnNames = {"ID", "商品编号", "商品名", "兑换价格"};
 
-        table = new JTable(null, columnNames){
+        table = new JTable(){
             //设置禁止编辑单元格
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -58,15 +58,15 @@ public class MGoods {
         };
         table.setModel(new DefaultTableModel(null, columnNames));
 
-        JScrollPane scrollPane = new JScrollPane(table);
         //table.setFillsViewportHeight(true);
+        table.setRowHeight(50);
         //列排序功能
         //table.setAutoCreateRowSorter(true);
         //设置表格列不可移动
         table.getTableHeader().setReorderingAllowed(false);
         //行单选
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
+        JScrollPane scrollPane = new JScrollPane(table);
 
 
 
@@ -81,8 +81,8 @@ public class MGoods {
         jp3.add(lastPageButton);
 
         mainFrame = new JFrame("商品管理");
-        mainFrame.setSize(500,500);
-        mainFrame.setLayout(new GridLayout(3,1));
+        mainFrame.setSize(500,550);
+        mainFrame.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
         mainFrame.setResizable(false);
         mainFrame.setLocationRelativeTo(null);
 
@@ -102,12 +102,12 @@ public class MGoods {
         this.currentPage = currentPage;
     }
 
-    public int getFristPage() {
-        return fristPage;
+    public int getFirstPage() {
+        return firstPage;
     }
 
-    public void setFristPage(int fristPage) {
-        this.fristPage = fristPage;
+    public void setFirstPage(int firstPage) {
+        this.firstPage = firstPage;
     }
 
     public int getLastPage() {
@@ -125,21 +125,66 @@ public class MGoods {
 
         showData();
 
-        refreshButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showData();
-            }
+        refreshButton.addActionListener(e -> showData());
+
+        addGoodsButton.addActionListener(e -> {
+            AddGoods addGoods = new AddGoods();
+            addGoods.go();
+
+            //获取子窗口，添加窗口监听当子窗口关闭后刷新table数据
+            JFrame frame = (JFrame) addGoods.getFrame();
+            frame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+                    setCurrentPage(getLastPage());
+                    showData();
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
         });
 
-        addGoodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                AddGoods addGoods = new AddGoods();
-                addGoods.go();
-
+        editGoodsButton.addActionListener(e -> {
+            String id = table.getValueAt(table.getSelectedRow(),0).toString();
+            if (id.isEmpty()) {
+                JOptionPane.showMessageDialog(null,
+                        "请选择商品！",
+                        "注意",
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                int ID = Integer.parseInt(id);
+                EditGoods editGoods = new EditGoods();
+                editGoods.go(ID);
                 //获取子窗口，添加窗口监听当子窗口关闭后刷新table数据
-                JFrame frame = (JFrame) addGoods.getFrame();
+                JFrame frame = (JFrame) editGoods.getFrame();
                 frame.addWindowListener(new WindowListener() {
                     @Override
                     public void windowOpened(WindowEvent e) {
@@ -153,7 +198,6 @@ public class MGoods {
 
                     @Override
                     public void windowClosed(WindowEvent e) {
-                        setCurrentPage(getLastPage());
                         showData();
                     }
 
@@ -180,141 +224,70 @@ public class MGoods {
             }
         });
 
-        editGoodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        deleGoodsButton.addActionListener(e -> {
+
+            GoodsProcess goodsProcess = new GoodsProcess();
+
+            int result=JOptionPane.showConfirmDialog(null, "是否删除该商品？");
+            if(result==0){
+
+                //获取选中行的id
                 String id = table.getValueAt(table.getSelectedRow(),0).toString();
-                if (id.isEmpty()) {
+
+                int ID = Integer.parseInt(id);
+                boolean c = goodsProcess.deleGoods(ID);
+                if (c) {
+                    //刷新表格
+                    showData();
                     JOptionPane.showMessageDialog(null,
-                            "请选择商品！",
+                            "删除成功！",
                             "注意",
                             JOptionPane.WARNING_MESSAGE);
                 } else {
-                    int ID = Integer.parseInt(id);
-                    EditGoods editGoods = new EditGoods();
-                    editGoods.go(ID);
-                    //获取子窗口，添加窗口监听当子窗口关闭后刷新table数据
-                    JFrame frame = (JFrame) editGoods.getFrame();
-                    frame.addWindowListener(new WindowListener() {
-                        @Override
-                        public void windowOpened(WindowEvent e) {
-
-                        }
-
-                        @Override
-                        public void windowClosing(WindowEvent e) {
-
-                        }
-
-                        @Override
-                        public void windowClosed(WindowEvent e) {
-                            showData();
-                        }
-
-                        @Override
-                        public void windowIconified(WindowEvent e) {
-
-                        }
-
-                        @Override
-                        public void windowDeiconified(WindowEvent e) {
-
-                        }
-
-                        @Override
-                        public void windowActivated(WindowEvent e) {
-
-                        }
-
-                        @Override
-                        public void windowDeactivated(WindowEvent e) {
-
-                        }
-                    });
+                    JOptionPane.showMessageDialog(null,
+                            "删除失败！",
+                            "注意",
+                            JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
-        deleGoodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-
-                GoodsProcess goodsProcess = new GoodsProcess();
-
-                int result=JOptionPane.showConfirmDialog(null, "是否删除该商品？");
-                if(result==0){
-
-                    //获取选中行的id
-                    String id = table.getValueAt(table.getSelectedRow(),0).toString();
-
-                    int ID = Integer.parseInt(id);
-                    boolean c = goodsProcess.deleGoods(ID);
-                    if (c) {
-                        //刷新表格
-                        showData();
-                        JOptionPane.showMessageDialog(null,
-                                "删除成功！",
-                                "注意",
-                                JOptionPane.WARNING_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null,
-                                "删除失败！",
-                                "注意",
-                                JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
+        fristPageButton.addActionListener(e -> {
+            setCurrentPage(firstPage);
+            showData();
         });
 
-        fristPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setCurrentPage(fristPage);
+        previousPageButton.addActionListener(e -> {
+            if(getCurrentPage() > getFirstPage()){
+                setCurrentPage(currentPage - 1);
+                showData();
+            }else{
+                setCurrentPage(getFirstPage());
                 showData();
             }
         });
 
-        previousPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getCurrentPage() > getFristPage()){
-                    setCurrentPage(currentPage - 1);
-                    showData();
-                }else{
-                    setCurrentPage(getFristPage());
-                    showData();
-                }
-            }
-        });
-
-        nextPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(getCurrentPage() < getLastPage()){
-                    setCurrentPage(currentPage + 1);
-                    showData();
-                }else{
-                    setCurrentPage(lastPage);
-                    showData();
-                }
-            }
-        });
-
-        lastPageButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        nextPageButton.addActionListener(e -> {
+            if(getCurrentPage() < getLastPage()){
+                setCurrentPage(currentPage + 1);
+                showData();
+            }else{
                 setCurrentPage(lastPage);
                 showData();
             }
+        });
+
+        lastPageButton.addActionListener(e -> {
+            setCurrentPage(lastPage);
+            showData();
         });
     }
 
     public void initPageNumber(){
 
-        this.fristPage = 1;
+        this.firstPage = 1;
         this.tableRows = 8;
-        this.currentPage = fristPage;
+        this.currentPage = firstPage;
 
         if(this.goodsList.size() % this.tableRows ==0){
             this.lastPage = this.goodsList.size() / this.tableRows;
