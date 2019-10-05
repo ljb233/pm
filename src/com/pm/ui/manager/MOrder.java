@@ -147,47 +147,9 @@ public class MOrder {
                             "警告",
                             JOptionPane.WARNING_MESSAGE);
                 }else {
-                    int OrderID=Integer.parseInt(orderid);
+                    int OID=Integer.parseInt(orderid);
                     EditOrder editOrder =new EditOrder();
-                    editOrder.go(OrderID);
-                    //关联子窗口
-                    JFrame frame =(JFrame)editOrder.getFrame();
-                    frame.addWindowListener(new WindowListener() {
-                        @Override
-                        public void windowOpened(WindowEvent windowEvent) {
-
-                        }
-
-                        @Override
-                        public void windowClosing(WindowEvent windowEvent) {
-
-                        }
-
-                        @Override
-                        public void windowClosed(WindowEvent windowEvent) {
-                            showData();
-                        }
-
-                        @Override
-                        public void windowIconified(WindowEvent windowEvent) {
-
-                        }
-
-                        @Override
-                        public void windowDeiconified(WindowEvent windowEvent) {
-
-                        }
-
-                        @Override
-                        public void windowActivated(WindowEvent windowEvent) {
-
-                        }
-
-                        @Override
-                        public void windowDeactivated(WindowEvent windowEvent) {
-
-                        }
-                    });
+                    editOrder.go(OID);
                 }
             }
         });
@@ -275,7 +237,7 @@ public class MOrder {
 
         for (VOrderinfId vOrderinfId:list){
             Vector v = new Vector();
-            v.add(vOrderinfId.getOrderId());
+            v.add(vOrderinfId.getoId());
             v.add(vOrderinfId.getCreateDate());
             v.add(vOrderinfId.getCompDate());
             v.add(vOrderinfId.getOsType());

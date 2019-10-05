@@ -1,8 +1,7 @@
 package com.pm.process;
 
-import com.pm.dao.datasource.Goods;
 import com.pm.dao.datasource.Order;
-import com.pm.dao.factory.GoodsDAO;
+import com.pm.dao.datasource.VOrderinfId;
 import com.pm.dao.factory.ManagerDAO;
 import com.pm.dao.factory.OrderDAO;
 import com.pm.util.HibernateUtils;
@@ -26,15 +25,6 @@ public class OrderProcess {
     public List<Order>getAllOrder(){
         try {
             return orderDAO.getAllOrder();
-        }catch (Exception e){
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public List<Order>getOrderById(int id){
-        try {
-            return (List<Order>) orderDAO.getOrderById(id);
         }catch (Exception e){
             e.printStackTrace();
             return null;
@@ -102,6 +92,19 @@ public class OrderProcess {
             transaction.commit();
             return true;
         } catch (SystemException | RollbackException | HeuristicMixedException | HeuristicRollbackException e) {
+            transaction.rollback();
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+    //订单状态修改
+    public boolean updateOSType(VOrderinfId vOrderinfId){
+        org.hibernate.Transaction transaction = session.beginTransaction();
+        try {
+            orderDAO.updateOsId(vOrderinfId);
+            transaction.commit();
+            return true;
+        }catch (Exception e){
             transaction.rollback();
             System.out.println(e.getMessage());
             return false;
