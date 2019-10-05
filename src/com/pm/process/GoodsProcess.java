@@ -4,7 +4,10 @@ import com.pm.dao.datasource.Goods;
 import com.pm.dao.factory.GoodsDAO;
 import com.pm.dao.factory.ManagerDAO;
 import com.pm.util.HibernateUtils;
+import com.pm.util.Tools;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
+import org.hibernate.Hibernate;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
@@ -22,7 +25,7 @@ public class GoodsProcess {
         goodsDAO = new GoodsDAO(session);
     }
 
-    /***
+    /**
      * 获取所有的商品信息，返回商品列表
      * @return
      */
@@ -44,7 +47,7 @@ public class GoodsProcess {
         return goodsDAO.getGoodsByID(id);
     }
 
-    /***
+    /**
      * 通过商品ID删除商品
      * @param id
      * @return
@@ -62,6 +65,9 @@ public class GoodsProcess {
         }
     }
 
+    /**
+     * 保存所有商品信息
+     */
     public boolean saveGoods(Goods goods) {
         Transaction transaction = session.beginTransaction();
         try {
@@ -75,9 +81,26 @@ public class GoodsProcess {
         }
     }
 
+    /**
+     * 保存所有商品信息,并添加图片信息
+     */
+    public boolean saveGoods(Goods goods, byte[] data) {
+        Transaction transaction = session.beginTransaction();
+        try {
+            goods.setPicStream(Hibernate.getLobCreator(session).createBlob(data));
+            goodsDAO.insertGoods(goods);
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            transaction.rollback();
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 
-
-
+    /**
+     * 更新所有商品信息
+     */
     public boolean updateGoods(Goods goods) {
         Transaction transaction = session.beginTransaction();
         try {

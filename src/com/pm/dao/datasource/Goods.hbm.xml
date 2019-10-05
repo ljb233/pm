@@ -20,5 +20,8 @@
         <property name="isDele">
             <column name="is_dele" sql-type="tinyint(1)"/>
         </property>
+        <property name="picStream">
+            <column name="pic_stream" sql-type="blob"/>
+        </property>
     </class>
 </hibernate-mapping>
