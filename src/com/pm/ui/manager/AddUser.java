@@ -135,4 +135,9 @@ public class AddUser extends JFrame {
         strname = name.getText().toString();
     }
 
+    //获取主窗口属性
+    public Object getFrame(){
+        return this.frame;
+    }
+
 }
