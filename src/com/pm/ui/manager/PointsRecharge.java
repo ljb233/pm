@@ -90,5 +90,9 @@ public class PointsRecharge extends JFrame {
     public void findjtext() {
         addValue1 = Integer.parseInt(apoints.getText());
     }
+    //获取主窗口属性
+    public Object getFrame(){
+        return this.frame;
+    }
 
 }

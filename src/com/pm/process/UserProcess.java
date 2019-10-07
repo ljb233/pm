@@ -100,7 +100,7 @@ public class UserProcess {
     }
 
 
-    public boolean insertUser(User user) {
+    public boolean  insertUser(User user) {
         //开启事务
         Transaction transaction = session.beginTransaction();
         //1.根据username查询该账户是否存在
@@ -115,5 +115,14 @@ public class UserProcess {
         }
         return false;
     }
+
+    public User searchUser(User user) {
+        //开启事务
+        Transaction transaction = session.beginTransaction();
+        //1.根据username查询该账户是否存在
+        User user2 = userDAO.queryIDByUserName(user.getUserName());
+        return user2;
+    }
+
 
 }
