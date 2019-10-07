@@ -169,10 +169,17 @@ public class AddGoods{
     private boolean check(){
         goodsId = goodsIdText.getText();
         goodsName = goodsNameText.getText();
-        goodsPrice = Integer.parseInt(goodsPriceText.getText());
-
         //检查商品编号是否全为数字
         boolean c = new Tools().isALLIntger(goodsId);
+        try {
+            goodsPrice = Integer.parseInt(goodsPriceText.getText());
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,
+                    "兑换价格错误！",
+                    "注意",
+                    JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
 
         if (goodsId.length() != 13 || !c) {
             JOptionPane.showMessageDialog(null,
