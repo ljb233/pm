@@ -95,48 +95,46 @@ public class EditGoods {
         goodsNameText.setText(goods.getGoodsName());
         goodsPriceText.setText(String.valueOf(goods.getGoodsPrice()));
 
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (check()){
-                    goods.setGoodsId(goodsId);
-                    goods.setGoodsName(goodsName);
-                    goods.setGoodsPrice(goodsPrice);
+        confirmButton.addActionListener(e -> {
+            if (check()){
+                goods.setGoodsId(goodsId);
+                goods.setGoodsName(goodsName);
+                goods.setGoodsPrice(goodsPrice);
 
-                    GoodsProcess goodsProcess = new GoodsProcess();
-                    boolean c = goodsProcess.updateGoods(goods);
+                GoodsProcess goodsProcess1 = new GoodsProcess();
+                boolean c = goodsProcess1.updateGoods(goods);
 
-                    if (c){
-                        JOptionPane.showMessageDialog(null,
-                                "修改成功！",
-                                "注意",
-                                JOptionPane.WARNING_MESSAGE);
-                        mainFrame.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(null,
-                                "修改失败！",
-                                "注意",
-                                JOptionPane.WARNING_MESSAGE);
-                    }
+                if (c){
+                    JOptionPane.showMessageDialog(null,
+                            "修改成功！",
+                            "注意",
+                            JOptionPane.WARNING_MESSAGE);
+                    mainFrame.dispose();
+                }else{
+                    JOptionPane.showMessageDialog(null,
+                            "修改失败！",
+                            "注意",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainFrame.dispose();
-            }
-        });
+        cancelButton.addActionListener(e -> mainFrame.dispose());
 
     }
 
     public boolean check(){
         goodsId = goodsIdText.getText();
         goodsName = goodsNameText.getText();
-        goodsPrice = Integer.parseInt(goodsPriceText.getText());
-
         boolean c = new Tools().isALLIntger(goodsId);
+        try {
+            goodsPrice = Integer.parseInt(goodsPriceText.getText());
+        }catch (Exception e){
+            JOptionPane.showMessageDialog(null,
+                    "兑换价格错误！",
+                    "注意",
+                    JOptionPane.WARNING_MESSAGE);
+        }
 
         if (goodsId.length() != 13 || !c) {
             JOptionPane.showMessageDialog(null,
