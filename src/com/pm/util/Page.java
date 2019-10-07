@@ -6,11 +6,12 @@ import java.util.List;
  * 处理分页列表数据
  * @author smallis
  */
-public class Page<R> {
+public class Page<E> {
     /**
      * rows: table显示行数
      * list: 数据列表
      */
+    private E e;
     private int rows;
 
     public Page(int rows) {
@@ -23,7 +24,7 @@ public class Page<R> {
      * @param list 数据列表
      * @return 返回切分好的list1
      */
-    public List<R> cutList(int index, List<R> list) {
+    public List<E> cutList(int index, List<E> list) {
 
         int listLength = list.size();
         if (index < 1) {
@@ -35,7 +36,7 @@ public class Page<R> {
         if (end >= listLength) {
             end = listLength;
         }
-        List<R> list1 = list.subList(start, end);
+        List<E> list1 = list.subList(start, end);
         return list1;
     }
 }

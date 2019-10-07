@@ -1,6 +1,7 @@
 package com.pm.dao.datasource;
 
 import javax.persistence.*;
+import java.sql.Blob;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +12,7 @@ public class Goods {
     private String goodsName;
     private int goodsPrice;
     private byte isDele;
+    private Blob picStream;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -62,6 +64,17 @@ public class Goods {
         this.isDele = isDele;
     }
 
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "pic_stream", nullable = true)
+    public Blob getPicStream() {
+        return picStream;
+    }
+
+    public void setPicStream(Blob picStream) {
+        this.picStream = picStream;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,6 +88,6 @@ public class Goods {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, goodsId, goodsName, goodsPrice);
+        return Objects.hash(id, goodsId, goodsName, goodsPrice, picStream);
     }
 }
