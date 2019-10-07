@@ -45,6 +45,9 @@ public class MUser extends JFrame {
     private List<User> userList;
     private List<Point> pointList;
     String strname;
+    String status0 = "正常";
+    String status1 = "已冻结";
+
     JTextField name;//文本
 
     public MUser() {
@@ -396,11 +399,10 @@ public class MUser extends JFrame {
             v.add(userInf.getId());
             v.add(userInf.getUserName());
             if(userInf.getIsFreeze()==0){
-                String status = "已冻结";
+                v.add(status0);
             }else {
-                String status = "正常";
+                v.add(status1);
             }
-            v.add(userInf.getIsFreeze());
             defaultTableModel.addRow(v);
         }
     }
