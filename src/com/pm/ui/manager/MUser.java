@@ -395,6 +395,11 @@ public class MUser extends JFrame {
             Vector v = new Vector();
             v.add(userInf.getId());
             v.add(userInf.getUserName());
+            if(userInf.getIsFreeze()==0){
+                String status = "已冻结";
+            }else {
+                String status = "正常";
+            }
             v.add(userInf.getIsFreeze());
             defaultTableModel.addRow(v);
         }
