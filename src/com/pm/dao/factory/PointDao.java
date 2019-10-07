@@ -13,14 +13,12 @@ public class PointDao {
     public PointDao(Session session) {
         this.session = session;
     }
-
     public Point getPointByID(int id) {
         Query query = session.createQuery("from Point where userId = ?1");
         query.setParameter(1, id);
         return (Point) query.uniqueResult();
 
     }
-
     //增加积分
     public void maddpoints(int updatetotal, int id) {
         Query query = session.createQuery("update Point set pointValue =?1 where userId=?2");

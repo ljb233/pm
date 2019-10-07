@@ -28,6 +28,7 @@ public class UserDAO {
         return (User) query.uniqueResult();
     }
 
+
     public Point queryIDByUserNameTOPOINT(String userName) {
         Query query = session.createQuery("from Point where userId = ?1");
         query.setParameter(1, userName);

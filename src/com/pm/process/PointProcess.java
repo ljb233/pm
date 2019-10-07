@@ -1,16 +1,9 @@
 package com.pm.process;
-
-import com.pm.dao.datasource.Point;
-import com.pm.dao.datasource.User;
-import com.pm.dao.datasource.VOrderinfId;
 import com.pm.dao.factory.PointDao;
 import com.pm.dao.factory.UserDAO;
 import com.pm.util.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-
-import javax.swing.*;
-import java.util.List;
 
 public class PointProcess {
     private Session session;
@@ -39,12 +32,12 @@ public class PointProcess {
         }
     }
 
-    public List<Point> getallpoint(){
+    public int getallpoint(int id){
         try {
-            return pointDao.getAllPoint();
+            return pointDao.getPointByID(id).getPointValue();
         }catch (Exception e){
             e.printStackTrace();
-            return  null;
+            return Integer.parseInt(null);
         }
     }
 }

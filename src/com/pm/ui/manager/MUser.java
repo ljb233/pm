@@ -3,7 +3,9 @@ package com.pm.ui.manager;
 import com.pm.dao.datasource.User;
 import com.pm.dao.datasource.Point;
 import com.pm.dao.datasource.VOrderinfId;
+import com.pm.dao.factory.PointDao;
 import com.pm.process.OrderInfProcess;
+import com.pm.process.PointProcess;
 import com.pm.process.UserProcess;
 
 import java.awt.*;
@@ -47,7 +49,7 @@ public class MUser extends JFrame {
     String strname;
     String status0 = "正常";
     String status1 = "已冻结";
-
+    Point point = new Point();
     JTextField name;//文本
 
     public MUser() {
@@ -390,11 +392,9 @@ public class MUser extends JFrame {
         Page page = new Page(tableRows);
         List<User> list =  page.cutList(currentPage, userList);
 
-        OrderInfProcess orderInfProcess = new OrderInfProcess();
-        List<VOrderinfId> userInfList = orderInfProcess.getUserInf();
-
         //todo:在VOrderinfId视图中获取以下5个字段，显示在表格中
         for (User userInf : list) {
+            PointProcess pointProcess = new PointProcess();
             Vector v = new Vector();
             v.add(userInf.getId());
             v.add(userInf.getUserName());
@@ -403,6 +403,7 @@ public class MUser extends JFrame {
             }else {
                 v.add(status1);
             }
+            v.add(pointProcess.getallpoint(userInf.getId()));
             defaultTableModel.addRow(v);
         }
     }
