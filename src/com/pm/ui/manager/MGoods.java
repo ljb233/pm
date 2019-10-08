@@ -17,7 +17,7 @@ import java.util.Vector;
  * 管理商品的UI
  */
 public class MGoods {
-    private GoodsProcess goodsProcess;
+    private final int TABLE_HEIGHT = 100;
     private JPanel jp1;
     private JPanel jp2;
     private JPanel jp3;
@@ -72,7 +72,7 @@ public class MGoods {
 
         //table.setFillsViewportHeight(true);
         //设置行高
-        table.setRowHeight(100);
+        table.setRowHeight(TABLE_HEIGHT);
         //列排序功能
         //table.setAutoCreateRowSorter(true);
         //设置表格列不可移动
@@ -136,7 +136,11 @@ public class MGoods {
         showData();
 
         //刷新按钮的监听器
-        refreshButton.addActionListener(e -> showData());
+        refreshButton.addActionListener(e ->{
+                initGoodsList();
+                setLastPage();
+                showData();
+        });
         //上架商品按钮的监听器
         addGoodsButton.addActionListener(e -> {
             AddGoods addGoods = new AddGoods();
@@ -158,8 +162,11 @@ public class MGoods {
 
                 @Override
                 public void windowClosed(WindowEvent e) {
+                    initGoodsList();
+                    setLastPage();
                     setCurrentPage(getLastPage());
                     showData();
+
                 }
 
                 @Override
@@ -249,9 +256,13 @@ public class MGoods {
                 String id = table.getValueAt(table.getSelectedRow(),0).toString();
 
                 int ID = Integer.parseInt(id);
+                GoodsProcess goodsProcess = new GoodsProcess();
                 boolean c = goodsProcess.deleGoods(ID);
                 if (c) {
                     //刷新表格
+                    initGoodsList();
+                    setLastPage();
+                    if(currentPage > lastPage) setCurrentPage(getLastPage());
                     showData();
                     JOptionPane.showMessageDialog(null,
                             "删除成功！",
@@ -305,11 +316,15 @@ public class MGoods {
      * 初始化页码
      */
     private void initPageNumber(){
-
         this.tableRows = 8;
         this.currentPage = firstPage;
+        setLastPage();
+    }
 
-        //计算尾页的页码
+    /**
+     * 计算尾页的页码
+     */
+    private void setLastPage(){
         if(this.goodsList.size() % this.tableRows ==0){
             this.lastPage = this.goodsList.size() / this.tableRows;
         }else{
@@ -317,8 +332,11 @@ public class MGoods {
         }
     }
 
+    /**
+     * 初始化商品列表
+     */
     private void initGoodsList(){
-        goodsProcess = new GoodsProcess();
+        GoodsProcess goodsProcess = new GoodsProcess();
         this.goodsList = goodsProcess.getGoods();
     }
 
@@ -326,9 +344,8 @@ public class MGoods {
      *显示所有商品信息
      */
     private void showData(){
-        goodsList = goodsProcess.getGoods();
         DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
-        //清楚原有数据
+        //清除原有数据
         defaultTableModel.setRowCount(0);
 
         //列表分页
@@ -338,22 +355,33 @@ public class MGoods {
         try {
             for(Goods goods : list){
                 Vector v = new Vector();
-                if (goods.getIsDele() == 0){
-                    v.add(goods.getId());
-                    v.add(goods.getGoodsId());
-                    v.add(goods.getGoodsName());
-                    v.add(goods.getGoodsPrice());
-                    //获取图片数据，有就加载，无则加载默认图片
-                    Blob blob = goods.getPicStream();
-                    if(blob != null){
-                        byte[] data = blob.getBytes(1,(int)blob.length());
-                        v.add(new ImageIcon(data));
-                    }else {
-                        v.add(new ImageIcon("image/default.png"));
-                    }
-                    //添加一行数据
-                    defaultTableModel.addRow(v);
+                v.add(goods.getId());
+                v.add(goods.getGoodsId());
+                v.add(goods.getGoodsName());
+                v.add(goods.getGoodsPrice());
+                //获取图片数据，有就加载，无则加载默认图片
+                Blob blob = goods.getPicStream();
+                if(blob != null){
+                    byte[] data = blob.getBytes(1,(int)blob.length());
+                    ImageIcon image = new ImageIcon(data);
+                    //设置图片大小
+                    image.setImage(
+                            image.getImage().getScaledInstance(
+                                    (int) (TABLE_HEIGHT * 0.6),
+                                    (int) (TABLE_HEIGHT * 0.8),
+                                    Image.SCALE_FAST));
+                    v.add(image);
+                }else {
+                    ImageIcon image = new ImageIcon("image/default.png");
+                    image.setImage(
+                            image.getImage().getScaledInstance(
+                                    (int) (TABLE_HEIGHT * 0.6),
+                                    (int) (TABLE_HEIGHT * 0.8),
+                                    Image.SCALE_FAST));
+                    v.add(image);
                 }
+                //添加一行数据
+                defaultTableModel.addRow(v);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -367,7 +395,7 @@ public class MGoods {
             super(data, columnNames);
         }
 
-        //让table显示图片
+        //让table显示图片,columnIndex是要放图片的列
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             if(columnIndex == 4){

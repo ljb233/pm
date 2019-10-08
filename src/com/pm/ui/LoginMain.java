@@ -67,7 +67,7 @@ public class LoginMain extends JFrame {
         panel4.add(loginButton);
 
 
-        setTitle("积分管理系统登录入口");
+        setTitle("积分商城");
         setSize(300, 200);
         setBounds(600, 200, 300, 220);
         setLayout(new GridLayout(4, 1));

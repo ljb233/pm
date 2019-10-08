@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,25 +32,26 @@ public class MOrder {
     private int currentPage,
             firstPage,
             lastPage,
-            tableRows;
+            tableRows,
+            intOId;
     private List<VOrderinfId> orderList;
 
     public MOrder() {
         //初始化
-        searchText = new JTextField(10);
+        searchText=new JTextField(10);
         editB = new JButton("状态更改");
         searchB = new JButton("查询");
         topPageB = new JButton("首页");
         lastPageB = new JButton("上一页");
         nextPageB = new JButton("下一页");
         endPageB = new JButton("尾页");
-        jPanelButtonTop = new JPanel();
+        jPanelButtonTop=new JPanel();
         jPanelTable = new JPanel();
         jPanelButton = new JPanel();
 
 
         //订单表格
-        String[] columnNames = {
+        String[] columnNames={
                 "订单ID",
                 "下单时间",
                 "完成时间",
@@ -58,18 +60,19 @@ public class MOrder {
                 "下单用户"
         };
 
-        jTable = new JTable(null, columnNames) {
+        jTable = new JTable(null,columnNames){
             //禁止编辑单元格
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
+            public boolean isCellEditable(int row,int column){
+                return  false;
             }
         };
         jTable.setModel(new DefaultTableModel(null,
                 columnNames));
         jTable.setFillsViewportHeight(true);
-        jTable.setAutoCreateRowSorter(true);
         //排序
+        jTable.setAutoCreateRowSorter(true);
+        //不可移动
         jTable.getTableHeader().setReorderingAllowed(false);
         //不可多选
         jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -91,9 +94,10 @@ public class MOrder {
 
         jFrame = new JFrame("订单信息");
         jFrame.setSize(500,
-                400);
+                500);
         jFrame.setLayout(new GridLayout(3,
                 1));
+        //jFrame.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
         jFrame.setResizable(false);
         jFrame.setLocationRelativeTo(null);
 
@@ -104,32 +108,33 @@ public class MOrder {
 
 
     }
-
+    //获取搜索框值
+    public void findOrderId(){
+        intOId =Integer.parseInt(searchText.getText());
+    }
     //当前页
-    public int getCurrentPage() {
+    public int getCurrentPage(){
         return currentPage;
     }
 
-    public void setCurrentPage(int currentPage) {
-        this.currentPage = currentPage;
+    public void setCurrentPage(int currentPage){
+        this.currentPage=currentPage;
     }
-
     //首页
-    public int getFirstPage() {
+    public int getFirstPage(){
         return firstPage;
     }
 
-    public void setFirstPage(int firstPage) {
-        this.firstPage = firstPage;
+    public void setFirstPage(int firstPage){
+        this.firstPage=firstPage;
     }
-
     //尾页
-    public int getLastPage() {
+    public int getLastPage(){
         return lastPage;
     }
 
-    public void setLastPage(int lastPage) {
-        this.lastPage = lastPage;
+    public void setLastPage(int lastPage){
+        this.lastPage=lastPage;
     }
 
     public void go() {
@@ -144,23 +149,94 @@ public class MOrder {
             public void actionPerformed(ActionEvent actionEvent) {
                 String orderid = jTable.getValueAt(jTable.getSelectedRow(),
                         0).toString();
-                if (orderid.isEmpty()) {
+                if(orderid.isEmpty()){
                     JOptionPane.showMessageDialog(null,
                             "请选择订单!",
                             "警告",
                             JOptionPane.WARNING_MESSAGE);
-                } else {
-                    int OID = Integer.parseInt(orderid);
-                    EditOrder editOrder = new EditOrder();
+                }else {
+                    int OID=Integer.parseInt(orderid);
+                    EditOrder editOrder =new EditOrder();
                     editOrder.go(OID);
+
+                    //刷新
+                    JFrame frame = (JFrame)editOrder.getFrame();
+                    frame.addWindowListener(new WindowListener() {
+                        @Override
+                        public void windowOpened(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowClosing(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowClosed(WindowEvent windowEvent) {
+                            setOrderList();
+                            showData();
+                        }
+
+                        @Override
+                        public void windowIconified(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowDeiconified(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowActivated(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowDeactivated(WindowEvent windowEvent) {
+
+                        }
+                    });
                 }
+
             }
         });
         //查询按钮功能
         searchB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                findOrderId();
+                VOrderinfId vOrderinfId = new VOrderinfId();
+                OrderInfProcess orderInfProcess = new OrderInfProcess();
+                vOrderinfId.setOsId(intOId);
+                VOrderinfId vOrderinfId1 = orderInfProcess.searchOrder(vOrderinfId);
 
+                if (vOrderinfId1!=null){
+                    DefaultTableModel defaultTableModel = (DefaultTableModel)jTable.getModel();
+                    defaultTableModel.setRowCount(0);
+
+                    List<VOrderinfId> list = Collections.singletonList(vOrderinfId1);
+                    for (VOrderinfId vOrderInf : list){
+                        Vector v = new Vector();
+                        if(vOrderinfId!=null){
+                            v.add(vOrderInf.getoId());
+                            v.add(vOrderInf.getCreateDate());
+                            v.add(vOrderInf.getCompDate());
+                            v.add(vOrderInf.getOsType());
+                            v.add(vOrderInf.getGoodsName());
+                            v.add(vOrderInf.getUserName());
+                            defaultTableModel.addRow(v);
+                        }
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "订单不存在!",
+                            "警告",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
             }
         });
         //首页按钮功能
@@ -175,10 +251,10 @@ public class MOrder {
         lastPageB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (getCurrentPage() > getFirstPage()) {
-                    setCurrentPage(currentPage - 1);
+                if (getCurrentPage()>getFirstPage()){
+                    setCurrentPage(currentPage-1);
                     showData();
-                } else {
+                }else {
                     setCurrentPage(firstPage);
                     showData();
                 }
@@ -188,10 +264,10 @@ public class MOrder {
         nextPageB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (getCurrentPage() < getLastPage()) {
-                    setCurrentPage(currentPage + 1);
+                if (getCurrentPage()<getLastPage()){
+                    setCurrentPage(currentPage+1);
                     showData();
-                } else {
+                }else {
                     setCurrentPage(lastPage);
                     showData();
                 }
@@ -208,45 +284,47 @@ public class MOrder {
 
 
     }
-
     //初始化分页
-    public void initPageNumber() {
-        this.firstPage = 1;
-        this.tableRows = 5;
-        this.currentPage = firstPage;
+    public void initPageNumber(){
+        this.firstPage=1;
+        this.tableRows=5;
+        this.currentPage=firstPage;
 
-        if (this.orderList.size() % this.tableRows == 0) {
-            this.lastPage = this.orderList.size() / this.tableRows;
-        } else {
-            this.lastPage = this.orderList.size() / this.tableRows + 1;
+        if(this.orderList.size()%this.tableRows==0){
+            this.lastPage=this.orderList.size()/this.tableRows;
+        }else {
+            this.lastPage=this.orderList.size()/this.tableRows+1;
         }
     }
 
-    public void setOrderList() {
-        OrderInfProcess orderInfProcess = new OrderInfProcess();
-        this.orderList = orderInfProcess.getAllOrderInf();
+    public void setOrderList(){
+        OrderInfProcess orderInfProcess=new OrderInfProcess();
+        this.orderList=orderInfProcess.getAllOrderInf();
     }
 
 
-    //显示订单信息
-    public void showData() {
 
-        DefaultTableModel defaultTableModel = (DefaultTableModel) jTable.getModel();
+    //显示订单信息
+    public void showData(){
+
+        DefaultTableModel defaultTableModel =(DefaultTableModel)jTable.getModel();
         defaultTableModel.setRowCount(0);
 
         //分页
-        Page page = new Page(tableRows);
-        List<VOrderinfId> list = page.cutList(currentPage, orderList);
+        Page page= new Page(tableRows);
+        List<VOrderinfId> list=page.cutList(currentPage,orderList);
 
-        for (VOrderinfId vOrderinfId : list) {
+        for (VOrderinfId vOrderinfId:list){
             Vector v = new Vector();
-            v.add(vOrderinfId.getoId());
-            v.add(vOrderinfId.getCreateDate());
-            v.add(vOrderinfId.getCompDate());
-            v.add(vOrderinfId.getOsType());
-            v.add(vOrderinfId.getGoodsName());
-            v.add(vOrderinfId.getUserName());
-            defaultTableModel.addRow(v);
+            if(vOrderinfId!=null){
+                v.add(vOrderinfId.getoId());
+                v.add(vOrderinfId.getCreateDate());
+                v.add(vOrderinfId.getCompDate());
+                v.add(vOrderinfId.getOsType());
+                v.add(vOrderinfId.getGoodsName());
+                v.add(vOrderinfId.getUserName());
+                defaultTableModel.addRow(v);
+            }
         }
 
     }

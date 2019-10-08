@@ -160,6 +160,7 @@ public class EditOrder {
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+
                 jFrame.dispose();
             }
         });
@@ -181,6 +182,6 @@ public class EditOrder {
     //主窗口获取
     public Object getFrame(){
 
-        return 0;
+        return this.jFrame;
     }
 }
