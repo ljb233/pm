@@ -1,10 +1,6 @@
 package com.pm.ui.manager;
 
 import com.pm.dao.datasource.User;
-import com.pm.dao.datasource.Point;
-import com.pm.dao.datasource.VOrderinfId;
-import com.pm.dao.factory.PointDao;
-import com.pm.process.OrderInfProcess;
 import com.pm.process.PointProcess;
 import com.pm.process.UserProcess;
 
@@ -21,23 +17,25 @@ import com.pm.util.Page;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
+/**
+ * 管理员-用户管理-主界面
+ *@Auther: linyang
+ */
 public class MUser extends JFrame {
-    private static final long serialVersionUID = 9527L;
     private JPanel pane1;
     private JPanel pane2;
     private JPanel pane3;
     private JTable table;
-    private JButton addpoint;
-    private JButton adduser;
-    private JButton freezeuser;
-    private JButton stopfrzee;
-    private JButton updatepwd;
-    private JButton search;
-    private JButton firstPageButton;
-    private JButton nextPageButton;
-    private JButton previousPageButton;
-    private JButton lastPageButton;
+    private JButton btnAddpoint;
+    private JButton btnAdduser;
+    private JButton btnFreezeuser;
+    private JButton btnStopfrzeeuser;
+    private JButton btnUpdatepwd;
+    private JButton btnSearch;
+    private JButton btnFirstPageButton;
+    private JButton btnNextPageButton;
+    private JButton btnPreviousPageButton;
+    private JButton btnLastPageButton;
     private int currentPage;
     private int fristPage;
     private int lastPage;
@@ -45,12 +43,9 @@ public class MUser extends JFrame {
     private JTextField searchfield;
     private Object[][] data;
     private List<User> userList;
-    private List<Point> pointList;
-    String strname;
-    String status0 = "正常";
-    String status1 = "已冻结";
-    Point point = new Point();
-    JTextField name;//文本
+    private String strname;
+    private static final String NORMAL = "正常";
+    private static final String FROZEN = "已冻结";
 
     public MUser() {
         super();
@@ -61,21 +56,20 @@ public class MUser extends JFrame {
         searchfield  = new JTextField("输入用户名查找",10);
         searchfield.setFont(new Font("标楷体",Font.TRUETYPE_FONT|Font.ITALIC,12));
 
-        addpoint = new JButton("积分充值");
-        adduser = new JButton("添加用户");
-        freezeuser = new JButton("冻结用户");
-        stopfrzee = new JButton("解冻用户");
-        updatepwd = new JButton("重置密码");
-        search = new JButton("go");
-        firstPageButton = new JButton("首页");
-        previousPageButton = new JButton("上一页");
-        nextPageButton = new JButton("下一页");
-        lastPageButton = new JButton("末页");
-
+        btnAddpoint = new JButton("积分充值");
+        btnAdduser = new JButton("添加用户");
+        btnFreezeuser = new JButton("冻结用户");
+        btnStopfrzeeuser = new JButton("解冻用户");
+        btnUpdatepwd = new JButton("重置密码");
+        btnSearch = new JButton("go");
+        btnFirstPageButton = new JButton("首页");
+        btnPreviousPageButton = new JButton("上一页");
+        btnNextPageButton = new JButton("下一页");
+        btnLastPageButton = new JButton("末页");
         pane1.add(searchfield);
-        pane1.add(search);
+        pane1.add(btnSearch);
         //设置表格
-        setBounds(100,100,600,600);
+        setBounds(100,100,600,620);
         String[] columnNames = {"ID","用户名","账户状态","积分值"};
         table = new JTable(data, columnNames);
         //创建表格模型 （目的是操作表格）
@@ -85,31 +79,29 @@ public class MUser extends JFrame {
         scrollpane.getViewport().add(table);
 
         pane2.add(Box.createGlue()); // 挤占用户管理按钮和窗口左侧空间
-        pane2.add(addpoint);
+        pane2.add(btnAddpoint);
         pane2.add(Box.createHorizontalStrut(20));// 按钮之间的水平距离
-        pane2.add(adduser);
+        pane2.add(btnAdduser);
         pane2.add(Box.createHorizontalStrut(20));
-        pane2.add(freezeuser);
+        pane2.add(btnFreezeuser);
         pane2.add(Box.createHorizontalStrut(20));
-        pane2.add(stopfrzee);
+        pane2.add(btnStopfrzeeuser);
         pane2.add(Box.createHorizontalStrut(20));
-        pane2.add(updatepwd);
+        pane2.add(btnUpdatepwd);
         pane2.add(Box.createGlue());
         pane2.add(scrollpane);
 
-        pane3.add(firstPageButton);
-        pane3.add(previousPageButton);
-        pane3.add(nextPageButton);
-        pane3.add(lastPageButton);
+        pane3.add(btnFirstPageButton);
+        pane3.add(btnPreviousPageButton);
+        pane3.add(btnNextPageButton);
+        pane3.add(btnLastPageButton);
 
         add(pane1);
         add(pane2);
         add(pane3);
 
         setTitle("用户管理界面");// 标题
-        //setSize(600, 600);// 窗口大小
         setLayout(new GridLayout(3, 1));
-        //setResizable(false);
         setLocationRelativeTo(null);// 窗口居中
         this.setVisible(true);
     }
@@ -136,44 +128,46 @@ public class MUser extends JFrame {
     public void go() {
         setUserList();
         initPageNumber();
-        showData();
-        search.addActionListener(new ActionListener() {
+        ShowData();
+        btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findjtext();
                 User user = new User();
                 user.setUserName(strname);
                 UserProcess userProcess = new UserProcess();
-                User user2 = userProcess.searchUser(user);
+                User user2 = userProcess.SearchUser(user);
 
-                DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
-                defaultTableModel.setRowCount(0);
+                if (user2 != null) {
+                    DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
+                    defaultTableModel.setRowCount(0);
 
-                //列表分页
-                Page page = new Page(tableRows);
-                List<User> list =  page.cutList(currentPage, Collections.singletonList(user2));
-
-                OrderInfProcess orderInfProcess = new OrderInfProcess();
-                List<VOrderinfId> userInfList = orderInfProcess.getUserInf();
-
-                //todo:在VOrderinfId视图中获取以下5个字段，显示在表格中
-                for (User userInf : list) {
-                    Vector v = new Vector();
-                    v.add(userInf.getId());
-                    v.add(userInf.getUserName());
-                    v.add(userInf.getIsFreeze());
-                    defaultTableModel.addRow(v);
+                    List<User> list = Collections.singletonList(user2);
+                    for (User userInf : list) {
+                        Vector v = new Vector();
+                        v.add(userInf.getId());
+                        v.add(userInf.getUserName());
+                        if (userInf.getIsFreeze() == 0) {
+                            v.add(NORMAL);
+                        } else {
+                            v.add(FROZEN);
+                        }
+                        PointProcess pointProcess = new PointProcess();
+                        v.add(pointProcess.getallpoint(userInf.getId()));
+                        defaultTableModel.addRow(v);
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null, "用户不存在！");
                 }
             }
         });
 
-        adduser.addActionListener(new ActionListener() {
+        btnAdduser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 AddUser addUser = new AddUser();
                 addUser.Main();
-                showData();
-
+                ShowData();
                 //刷新表格内容
                 JFrame frame = (JFrame) addUser.getFrame();
                 frame.addWindowListener(new WindowListener() {
@@ -186,8 +180,7 @@ public class MUser extends JFrame {
                     @Override
                     public void windowClosed(WindowEvent e) {
                         setUserList();
-                        initPageNumber();
-                        showData();
+                        ShowData();
                     }
                     @Override
                     public void windowIconified(WindowEvent e) {
@@ -205,7 +198,7 @@ public class MUser extends JFrame {
             }
         });
 
-        freezeuser.addActionListener(new ActionListener() {
+        btnFreezeuser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String id = null;
@@ -217,8 +210,7 @@ public class MUser extends JFrame {
                         UserProcess userProcess = new UserProcess();
                         userProcess.frzzeeUserByID(ID);
                         setUserList();
-                        initPageNumber();
-                        showData();
+                        ShowData();
                         JOptionPane.showMessageDialog(new JFrame(),"已冻结");
                     }else if(n == JOptionPane.NO_OPTION){
                         JOptionPane.showMessageDialog(new JFrame(),"已取消");
@@ -229,7 +221,7 @@ public class MUser extends JFrame {
             }
         });
 
-        stopfrzee.addActionListener(new ActionListener() {
+        btnStopfrzeeuser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String id = null;
@@ -241,8 +233,7 @@ public class MUser extends JFrame {
                         UserProcess userProcess = new UserProcess();
                         userProcess.stopfrzzeeUserByID(ID);
                         setUserList();
-                        initPageNumber();
-                        showData();
+                        ShowData();
                         JOptionPane.showMessageDialog(new JFrame(),"已解冻");
                     }else if(n == JOptionPane.NO_OPTION){
                         JOptionPane.showMessageDialog(new JFrame(),"已取消");
@@ -253,7 +244,7 @@ public class MUser extends JFrame {
             }
         });
 
-        updatepwd.addActionListener(new ActionListener() {
+        btnUpdatepwd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String id = null;
@@ -265,9 +256,6 @@ public class MUser extends JFrame {
                         String pwd = "123456";
                         UserProcess up = new UserProcess();
                         Boolean modify = up.editpwdUser(ID,pwd);
-                        setUserList();
-                        initPageNumber();
-                        showData();
                         JOptionPane.showMessageDialog(new JFrame(),"已重置");
                     } else if (n == JOptionPane.NO_OPTION) {
                         JOptionPane.showMessageDialog(new JFrame(),"已取消");
@@ -278,7 +266,7 @@ public class MUser extends JFrame {
             }
         });
 
-        addpoint.addActionListener(new ActionListener() {
+        btnAddpoint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String id = null;
@@ -288,6 +276,7 @@ public class MUser extends JFrame {
                     int addValue=0;
                     PointsRecharge pointsRecharge = new PointsRecharge();
                     pointsRecharge.Main(addValue,ID);
+                    ShowData();
                     //刷新表格内容
                     JFrame frame = (JFrame) pointsRecharge.getFrame();
                     frame.addWindowListener(new WindowListener() {
@@ -300,8 +289,7 @@ public class MUser extends JFrame {
                         @Override
                         public void windowClosed(WindowEvent e) {
                             setUserList();
-                            initPageNumber();
-                            showData();
+                            ShowData();
                         }
                         @Override
                         public void windowIconified(WindowEvent e) {
@@ -322,45 +310,45 @@ public class MUser extends JFrame {
             }
         });
 
-        firstPageButton.addActionListener(new ActionListener() {
+        btnFirstPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setCurrentPage(fristPage);
-                showData();
+                ShowData();
             }
         });
 
-        previousPageButton.addActionListener(new ActionListener() {
+        btnPreviousPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(getCurrentPage() > getFristPage()){
                     setCurrentPage(currentPage - 1);
-                    showData();
+                    ShowData();
                 }else{
                     setCurrentPage(getFristPage());
-                    showData();
+                    ShowData();
                 }
             }
         });
 
-        nextPageButton.addActionListener(new ActionListener() {
+        btnNextPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(getCurrentPage() < getLastPage()){
                     setCurrentPage(currentPage + 1);
-                    showData();
+                    ShowData();
                 }else{
                     setCurrentPage(lastPage);
-                    showData();
+                    ShowData();
                 }
             }
         });
 
-        lastPageButton.addActionListener(new ActionListener() {
+        btnLastPageButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setCurrentPage(lastPage);
-                showData();
+                ShowData();
             }
         });
     }
@@ -384,25 +372,23 @@ public class MUser extends JFrame {
     /***
      *显示所有用户信息
      */
-    public void showData() {
+    public void ShowData() {
         DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
         defaultTableModel.setRowCount(0);
-
         //列表分页
         Page page = new Page(tableRows);
         List<User> list =  page.cutList(currentPage, userList);
 
-        //todo:在VOrderinfId视图中获取以下5个字段，显示在表格中
         for (User userInf : list) {
-            PointProcess pointProcess = new PointProcess();
             Vector v = new Vector();
             v.add(userInf.getId());
             v.add(userInf.getUserName());
             if(userInf.getIsFreeze()==0){
-                v.add(status0);
+                v.add(NORMAL);
             }else {
-                v.add(status1);
+                v.add(FROZEN);
             }
+            PointProcess pointProcess = new PointProcess();
             v.add(pointProcess.getallpoint(userInf.getId()));
             defaultTableModel.addRow(v);
         }

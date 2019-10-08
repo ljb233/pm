@@ -10,7 +10,10 @@ import org.hibernate.Transaction;
 
 import javax.swing.*;
 import java.util.List;
-
+/**
+ * 用户处理过程
+ *@Auther: linyang
+ */
 public class UserProcess {
     private Session session;
     private UserDAO userDAO;
@@ -24,6 +27,10 @@ public class UserProcess {
         managerDAO = new ManagerDAO(session);
     }
 
+    /**
+     * @TODO：获取所有用户
+     * @return AllUsers
+     */
     public List<User> getAllUsers() {
         try {
             return userDAO.getAllUsers();
@@ -33,22 +40,11 @@ public class UserProcess {
         }
     }
 
-    /***
-     * public User queryUserByID(int id){
-     *         try{
-     *             User user = userDAO.queryUserByID(id);
-     *             return user;
-     *         }catch (Exception e){
-     *             e.printStackTrace();
-     *             return null;
-     *         }
-     *     }
-     */
-    /***
-     * 用户登录进程
+    /**
+     * @TODO:登录
      * @param name
      * @param pwd
-     * @return
+     * @return user
      */
     public User userLogin(String name, String pwd) {
         try {
@@ -60,6 +56,11 @@ public class UserProcess {
         }
     }
 
+    /**
+     * @TODO:冻结用户
+     * @param id
+     * @return boolean
+     */
     public boolean frzzeeUserByID(int id) {
         Transaction transaction = session.beginTransaction();
         try {
@@ -73,6 +74,11 @@ public class UserProcess {
         }
     }
 
+    /**
+     * @TODO:解冻用户
+     * @param id
+     * @return boolean
+     */
     public boolean stopfrzzeeUserByID(int id) {
         Transaction transaction = session.beginTransaction();
         try {
@@ -86,6 +92,12 @@ public class UserProcess {
         }
     }
 
+    /**
+     * @TODO:重置用户密码
+     * @param id
+     * @param pwd
+     * @return boolean
+     */
     public boolean editpwdUser(int id, String pwd) {
         Transaction transaction = session.beginTransaction();
         try {
@@ -99,30 +111,31 @@ public class UserProcess {
         }
     }
 
-
-    public boolean  insertUser(User user) {
-        //开启事务
+    /**
+     * @TODO:增加用户
+     * @param user
+     * @return boolean
+     */
+    public boolean insertUser(User user) {
         Transaction transaction = session.beginTransaction();
-        //1.根据username查询该账户是否存在
         User user2 = userDAO.queryIDByUserName(user.getUserName());
         if (user2 != null) {
             JOptionPane.showMessageDialog(null, "用户已存在");
         } else {
             userDAO.insertUser(user);
-            //未出现异常提交
             transaction.commit();
             return true;
         }
         return false;
     }
 
-    public User searchUser(User user) {
-        //开启事务
-        Transaction transaction = session.beginTransaction();
-        //1.根据username查询该账户是否存在
+    /**
+     * @TODO:搜索用户
+     * @param user
+     * @return user2
+     */
+    public User SearchUser(User user) {
         User user2 = userDAO.queryIDByUserName(user.getUserName());
         return user2;
     }
-
-
 }
