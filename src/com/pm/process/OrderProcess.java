@@ -52,6 +52,7 @@ public class OrderProcess {
             return null;
         }
     }
+
     //取消订单
 //  id	os_type
 //  1	未支付
@@ -60,13 +61,19 @@ public class OrderProcess {
 //  4	无效
 //  5	已删除
 //  6	已取消
-
+//  7   未发货
     public boolean cancelOrder(int orderId) {
         org.hibernate.Transaction tx = session.beginTransaction();
         try {
-            orderDAO.updateOrderStatus(orderId, 6);
-            tx.commit();
-            return true;
+            int status = orderDAO.getOrderById(orderId).getOsId();
+            if (status == 3 || status == 5 || status == 6 || status == 4)
+
+                return false;
+            else {
+                orderDAO.updateOrderStatus(orderId, 6);
+                tx.commit();
+                return true;
+            }
         } catch (Exception e) {
             tx.rollback();
             System.out.println(e.getMessage());
@@ -80,7 +87,7 @@ public class OrderProcess {
         org.hibernate.Transaction tx = session.beginTransaction();
         try {
             int status = orderDAO.getOrderById(orderId).getOsId();
-            if (status == 1 || status == 2 || status == 7)
+            if (status == 1 || status == 2 || status == 7 || status == 5)
 
                 return false;
             else {

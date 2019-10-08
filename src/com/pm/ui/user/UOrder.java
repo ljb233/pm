@@ -71,7 +71,7 @@ public class UOrder extends JFrame {
         btnCancel.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UOrder.this.dispose();
+                //UOrder.this.dispose();
                 try {
                     String id = table.getValueAt(table.getSelectedRow(), 0).toString();
                     int ID = Integer.valueOf(id);
@@ -82,7 +82,7 @@ public class UOrder extends JFrame {
                     } else {
 
 
-                        JOptionPane.showMessageDialog(null, "操作失败");
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可取消");
                     }
                     ;
 
@@ -101,7 +101,7 @@ public class UOrder extends JFrame {
         btnDelete.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UOrder.this.dispose();
+                //UOrder.this.dispose();
                 try {
                     String id = table.getValueAt(table.getSelectedRow(), 0).toString();
                     int ID = Integer.valueOf(id);
