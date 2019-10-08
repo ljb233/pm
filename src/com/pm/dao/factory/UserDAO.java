@@ -18,7 +18,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:通过用户名查询该用户
+     * @DO:通过用户名查询该用户
      * @param userName
      * @return User
      */
@@ -29,7 +29,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:获取所有用户
+     * @DO:获取所有用户
      * @return AllUsers
      */
     public List<User> getAllUsers() {
@@ -38,7 +38,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:增加用户
+     * @DO:增加用户
      * @param b
      */
     public void insertUser(User b) {
@@ -46,7 +46,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:登录
+     * @DO:登录
      * @param name
      * @param pwd
      * @return user
@@ -60,7 +60,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:通过id冻结用户
+     * @DO:通过id冻结用户
      * @param id
      */
     public void frzzeeUser(int id) {
@@ -70,7 +70,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:通过id解冻用户
+     * @DO:通过id解冻用户
      * @param id
      */
     public void stopfrzzeeUser(int id) {
@@ -80,7 +80,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:重置用户密码
+     * @DO:重置用户密码
      * @param id
      * @param pwd
      */

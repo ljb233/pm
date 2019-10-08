@@ -22,7 +22,7 @@ public class PointProcess {
     }
 
     /**
-     * @TODO:积分增加处理
+     * @DO:积分增加处理
      * @param addValue
      * @param id
      * @return boolean
@@ -44,7 +44,7 @@ public class PointProcess {
     }
 
     /**
-     * @TODO:通过用户id获取积分值
+     * @DO:通过用户id获取积分值
      * @param id
      * @return PointValue
      */

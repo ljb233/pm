@@ -63,9 +63,7 @@ public class MGoods {
         table = new JTable(){
             //设置禁止编辑单元格
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
+            public boolean isCellEditable(int row, int column) { return false; }
         };
         //设置自定义表格模型
         table.setModel(new CustomModel(null, columnNames));

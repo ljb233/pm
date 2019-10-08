@@ -6,7 +6,10 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-
+/**
+ * 增加积分处理过程和ui
+ *@Auther: linyang
+ */
 public class PointsRecharge extends JFrame {
 
     JLabel tpoints;//标签
