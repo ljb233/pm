@@ -21,7 +21,7 @@ public class GoodsDAO {
      * @return  返回所有商品信息
      */
     public List<Goods> getAllGoods(){
-        Query<Goods> query = session.createQuery("from Goods",Goods.class);
+        Query<Goods> query = session.createQuery("from Goods where isDele = 0",Goods.class);
         return query.getResultList();
     }
 
@@ -33,7 +33,7 @@ public class GoodsDAO {
     public Goods getGoodsByID(int id){
         Query query = session.createQuery("from Goods where id = ?1");
         query.setParameter(1,id);
-        return (Goods) query.getResultList();
+        return (Goods) query.uniqueResult();
     }
 
     /**

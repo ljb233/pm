@@ -5,7 +5,7 @@ import com.pm.dao.factory.OrderInfDAO;
 import com.pm.util.HibernateUtils;
 import org.hibernate.Session;
 
-import java.util.Iterator;
+
 import java.util.List;
 
 public class OrderInfProcess {
@@ -53,7 +53,7 @@ public class OrderInfProcess {
                 j--;
             }
             j++;
-            //这里使用迭代器会抛异常有时间再处理
+            //这里使用list.remove(O)会抛异常有时间再处理
         }
         return list;
 
