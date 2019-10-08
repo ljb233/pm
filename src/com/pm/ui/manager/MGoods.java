@@ -332,6 +332,9 @@ public class MGoods {
         }
     }
 
+    /**
+     * 初始化商品列表
+     */
     private void initGoodsList(){
         GoodsProcess goodsProcess = new GoodsProcess();
         this.goodsList = goodsProcess.getGoods();
@@ -361,6 +364,7 @@ public class MGoods {
                 if(blob != null){
                     byte[] data = blob.getBytes(1,(int)blob.length());
                     ImageIcon image = new ImageIcon(data);
+                    //设置图片大小
                     image.setImage(
                             image.getImage().getScaledInstance(
                                     (int) (TABLE_HEIGHT * 0.6),
