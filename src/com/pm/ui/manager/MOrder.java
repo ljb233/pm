@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -31,7 +32,8 @@ public class MOrder {
     private int currentPage,
             firstPage,
             lastPage,
-            tableRows;
+            tableRows,
+            intOId;
     private List<VOrderinfId> orderList;
 
     public MOrder() {
@@ -68,8 +70,9 @@ public class MOrder {
         jTable.setModel(new DefaultTableModel(null,
                 columnNames));
         jTable.setFillsViewportHeight(true);
-        jTable.setAutoCreateRowSorter(true);
         //排序
+        jTable.setAutoCreateRowSorter(true);
+        //不可移动
         jTable.getTableHeader().setReorderingAllowed(false);
         //不可多选
         jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -91,9 +94,10 @@ public class MOrder {
 
         jFrame = new JFrame("订单信息");
         jFrame.setSize(500,
-                400);
+                500);
         jFrame.setLayout(new GridLayout(3,
                 1));
+        //jFrame.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
         jFrame.setResizable(false);
         jFrame.setLocationRelativeTo(null);
 
@@ -103,6 +107,10 @@ public class MOrder {
         jFrame.setVisible(true);
 
 
+    }
+    //获取搜索框值
+    public void findOrderId(){
+        intOId =Integer.parseInt(searchText.getText());
     }
     //当前页
     public int getCurrentPage(){
@@ -150,14 +158,85 @@ public class MOrder {
                     int OID=Integer.parseInt(orderid);
                     EditOrder editOrder =new EditOrder();
                     editOrder.go(OID);
+
+                    //刷新
+                    JFrame frame = (JFrame)editOrder.getFrame();
+                    frame.addWindowListener(new WindowListener() {
+                        @Override
+                        public void windowOpened(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowClosing(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowClosed(WindowEvent windowEvent) {
+                            setOrderList();
+                            showData();
+                        }
+
+                        @Override
+                        public void windowIconified(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowDeiconified(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowActivated(WindowEvent windowEvent) {
+
+                        }
+
+                        @Override
+                        public void windowDeactivated(WindowEvent windowEvent) {
+
+                        }
+                    });
                 }
+
             }
         });
         //查询按钮功能
         searchB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                findOrderId();
+                VOrderinfId vOrderinfId = new VOrderinfId();
+                OrderInfProcess orderInfProcess = new OrderInfProcess();
+                vOrderinfId.setOsId(intOId);
+                VOrderinfId vOrderinfId1 = orderInfProcess.searchOrder(vOrderinfId);
 
+                if (vOrderinfId1!=null){
+                    DefaultTableModel defaultTableModel = (DefaultTableModel)jTable.getModel();
+                    defaultTableModel.setRowCount(0);
+
+                    List<VOrderinfId> list = Collections.singletonList(vOrderinfId1);
+                    for (VOrderinfId vOrderInf : list){
+                        Vector v = new Vector();
+                        if(vOrderinfId!=null){
+                            v.add(vOrderInf.getoId());
+                            v.add(vOrderInf.getCreateDate());
+                            v.add(vOrderInf.getCompDate());
+                            v.add(vOrderInf.getOsType());
+                            v.add(vOrderInf.getGoodsName());
+                            v.add(vOrderInf.getUserName());
+                            defaultTableModel.addRow(v);
+                        }
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "订单不存在!",
+                            "警告",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                }
             }
         });
         //首页按钮功能
@@ -237,13 +316,15 @@ public class MOrder {
 
         for (VOrderinfId vOrderinfId:list){
             Vector v = new Vector();
-            v.add(vOrderinfId.getoId());
-            v.add(vOrderinfId.getCreateDate());
-            v.add(vOrderinfId.getCompDate());
-            v.add(vOrderinfId.getOsType());
-            v.add(vOrderinfId.getGoodsName());
-            v.add(vOrderinfId.getUserName());
-            defaultTableModel.addRow(v);
+            if(vOrderinfId!=null){
+                v.add(vOrderinfId.getoId());
+                v.add(vOrderinfId.getCreateDate());
+                v.add(vOrderinfId.getCompDate());
+                v.add(vOrderinfId.getOsType());
+                v.add(vOrderinfId.getGoodsName());
+                v.add(vOrderinfId.getUserName());
+                defaultTableModel.addRow(v);
+            }
         }
 
     }
