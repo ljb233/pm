@@ -22,10 +22,11 @@ public class UOrder extends JFrame {
     private JButton btnCancel;
     private JButton btnDelete;
     private Object[][] data;
-    private User user;
+    private User loginUser;
 
     public UOrder(User user) {
-        this.user = user;
+
+        loginUser = user;
         jplPane1 = new JPanel();
         jplPane2 = new JPanel();
         btnCancel = new JButton("取消订单");
@@ -154,7 +155,8 @@ public class UOrder extends JFrame {
         DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
         defaultTableModel.setRowCount(0);
         OrderInfProcess op = new OrderInfProcess();
-        List<VOrderinfId> OrderList = op.getOrderInfByUId(user.getId());
+
+        List<VOrderinfId> OrderList = op.getOrderInfByUId(loginUser.getId());
         for (VOrderinfId order : OrderList) {
             Vector v = new Vector();
             v.add(order.getoId());
