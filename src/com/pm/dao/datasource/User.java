@@ -11,7 +11,8 @@ public class User {
     private String userPwd;
     private byte isFreeze;
 
-   @Id
+
+    @Id
     @Column(name = "id", nullable = false)
     public int getId() {
         return id;

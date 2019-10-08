@@ -2,6 +2,7 @@ package com.pm.dao.factory;
 
 import com.pm.dao.datasource.User;
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -17,10 +18,12 @@ public class UserDAO {
         this.session = session;
     }
 
+
+
     /**
-     * @TODO:通过用户名查询该用户
      * @param userName
      * @return User
+     * @TODO:通过用户名查询该用户
      */
     public User queryIDByUserName(String userName) {
         Query query = session.createQuery("from User where userName = ?1");
@@ -29,8 +32,8 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:获取所有用户
      * @return AllUsers
+     * @TODO:获取所有用户
      */
     public List<User> getAllUsers() {
         Query<User> query = session.createQuery("from User", User.class);
@@ -38,18 +41,18 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:增加用户
      * @param b
+     * @TODO:增加用户
      */
     public void insertUser(User b) {
         session.save(b);
     }
 
     /**
-     * @TODO:登录
      * @param name
      * @param pwd
      * @return user
+     * @TODO:登录
      */
     public User userLogin(String name, String pwd) {
         Query query = session.createQuery("from User where userName= ?1  and userPwd= ?2");
@@ -60,8 +63,8 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:通过id冻结用户
      * @param id
+     * @TODO:通过id冻结用户
      */
     public void frzzeeUser(int id) {
         Query query = session.createQuery("update User set isFreeze = 1 where id=?1");
@@ -70,8 +73,8 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:通过id解冻用户
      * @param id
+     * @TODO:通过id解冻用户
      */
     public void stopfrzzeeUser(int id) {
         Query query = session.createQuery("update User set isFreeze = 0 where id=?1");
@@ -80,9 +83,9 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:重置用户密码
      * @param id
      * @param pwd
+     * @TODO:重置用户密码
      */
     public void editpwdUser(int id, String pwd) {
         Query query = session.createQuery("update User set userPwd=?1 where id=?2");
@@ -90,4 +93,5 @@ public class UserDAO {
         query.setParameter(2, id);
         query.executeUpdate();
     }
+
 }
