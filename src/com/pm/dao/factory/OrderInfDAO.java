@@ -37,7 +37,7 @@ public class OrderInfDAO {
         return (VOrderinfId)query.uniqueResult();
     }
     public List<VOrderinfId> getOrderByUId(int uId){
-        Query query = session.createQuery("from VOrderinfId where  userId = ?1 and osType != '已删除'");
+        Query query = session.createQuery("from VOrderinfId where  userId = ?1");
         query.setParameter(1,uId);
         return query.list();
     }
