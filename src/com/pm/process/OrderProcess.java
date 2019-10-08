@@ -16,35 +16,38 @@ public class OrderProcess {
     private ManagerDAO managerDAO;
     private OrderDAO orderDAO;
     private Transaction transaction;
-    public OrderProcess(){
+
+    public OrderProcess() {
 
         session = HibernateUtils.getSession();
         managerDAO = new ManagerDAO(session);
         orderDAO = new OrderDAO(session);
     }
-    public List<Order>getAllOrder(){
+
+    public List<Order> getAllOrder() {
         try {
             return orderDAO.getAllOrder();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    //上面的似乎有点问题
-    public Order getOrderByID(int id){
+
+    public Order getOrderByID(int id) {
         try {
             return orderDAO.getOrderById(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
     //通过UserID获取Order对象
-    public List<Order>getOrderByUserId(int userId){
+    public List<Order> getOrderByUserId(int userId) {
         try {
             return orderDAO.getOrderByUserId(userId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -58,10 +61,10 @@ public class OrderProcess {
 //  5	已删除
 //  6	已取消
 
-    public boolean cancelOrder(int orderId){
-        org.hibernate.Transaction tx= session.beginTransaction();
+    public boolean cancelOrder(int orderId) {
+        org.hibernate.Transaction tx = session.beginTransaction();
         try {
-            orderDAO.updateOrderStatus(orderId,6);
+            orderDAO.updateOrderStatus(orderId, 6);
             tx.commit();
             return true;
         } catch (Exception e) {
@@ -71,19 +74,28 @@ public class OrderProcess {
         }
 
     }
+
     //删除订单
-    public boolean deleteOrder(int orderId){
-        org.hibernate.Transaction tx= session.beginTransaction();
+    public boolean deleteOrder(int orderId) {
+        org.hibernate.Transaction tx = session.beginTransaction();
         try {
-            orderDAO.updateOrderStatus(orderId,5);
-            tx.commit();
-            return true;
+            int status = orderDAO.getOrderById(orderId).getOsId();
+            if (status == 1 || status == 2 || status == 7)
+
+                return false;
+            else {
+                orderDAO.updateOrderStatus(orderId, 5);
+                tx.commit();
+                return true;
+            }
         } catch (Exception e) {
             tx.rollback();
-            System.out.println(e.getMessage());return false;
+            System.out.println(e.getMessage());
+            return false;
         }
 
     }
+
     public boolean frozenOrderById(int id) throws SystemException {
         Transaction transaction = (Transaction) session.beginTransaction();
         try {
@@ -97,14 +109,15 @@ public class OrderProcess {
             return false;
         }
     }
+
     //订单状态修改
-    public boolean updateOSType(VOrderinfId vOrderinfId){
+    public boolean updateOSType(VOrderinfId vOrderinfId) {
         org.hibernate.Transaction transaction = session.beginTransaction();
         try {
             orderDAO.updateOsId(vOrderinfId);
             transaction.commit();
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             transaction.rollback();
             System.out.println(e.getMessage());
             return false;

@@ -9,7 +9,6 @@ import javax.swing.*;
 
 public class PointsRecharge extends JFrame {
 
-    private static final long serialVersionUID = 12312321321L;
     JLabel tpoints;//标签
     JTextField apoints;//文本
     JButton btnadd;//按钮
@@ -70,7 +69,7 @@ public class PointsRecharge extends JFrame {
                 } else {
                     //创建service对象,
                     PointProcess pointProcess = new PointProcess();
-                    Boolean modify = pointProcess.maddpoints(addValue1, id);
+                    Boolean modify = pointProcess.addPoints(addValue1, id);
                     //执行添加用户方法,并将返回值存储在news里
                     //判断执行是否成功
                     if (modify) {
@@ -91,8 +90,5 @@ public class PointsRecharge extends JFrame {
         addValue1 = Integer.parseInt(apoints.getText());
     }
     //获取主窗口属性
-    public Object getFrame(){
-        return this.frame;
-    }
-
+    public Object getFrame(){ return this.frame; }
 }
