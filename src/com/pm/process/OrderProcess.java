@@ -79,9 +79,15 @@ public class OrderProcess {
     public boolean deleteOrder(int orderId) {
         org.hibernate.Transaction tx = session.beginTransaction();
         try {
-            orderDAO.updateOrderStatus(orderId, 5);
-            tx.commit();
-            return true;
+            int status = orderDAO.getOrderById(orderId).getOsId();
+            if (status == 1 || status == 2 || status == 7)
+
+                return false;
+            else {
+                orderDAO.updateOrderStatus(orderId, 5);
+                tx.commit();
+                return true;
+            }
         } catch (Exception e) {
             tx.rollback();
             System.out.println(e.getMessage());

@@ -108,9 +108,9 @@ public class UOrder extends JFrame {
                     OrderProcess op = new OrderProcess();
                     if (op.deleteOrder(ID) == true) {
                         showData();
-                        JOptionPane.showMessageDialog(null, "操作成功");
+                        JOptionPane.showMessageDialog(null, "操作成功该订单已删除");
                     } else {
-                        JOptionPane.showMessageDialog(null, "操作失败");
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可删除");
                     }
                 } catch (Exception el) {
                     JOptionPane.showMessageDialog(null,
