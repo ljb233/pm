@@ -67,4 +67,9 @@ public class OrderInfProcess {
             return null;
         }
     }
+    //搜索功能
+    public VOrderinfId searchOrder(VOrderinfId vOrderinfId){
+        VOrderinfId vOrderinfId1 = orderInfDAO.getOrderByOId1(vOrderinfId.getOsId());
+        return  vOrderinfId1;
+    }
 }
