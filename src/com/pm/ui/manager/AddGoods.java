@@ -12,7 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-public class AddGoods{
+public class AddGoods extends JFrame{
 
     private String goodsId = "";
     private String goodsName = "";
@@ -107,7 +107,7 @@ public class AddGoods{
         mainFrame.setLayout(new FlowLayout(FlowLayout.CENTER));
         mainFrame.setResizable(false);
 
-        //添加组件
+        //加载组件
         mainFrame.add(panel1);
         mainFrame.add(panel2);
         mainFrame.add(panel3);
@@ -118,15 +118,21 @@ public class AddGoods{
 
     public void go() {
 
+        //确定按钮监听器
         confirmButton.addActionListener(e -> {
             if (check()){
+                //装载数据
                 Goods goods = new Goods();
                 goods.setGoodsId(goodsId);
                 goods.setGoodsName(goodsName);
                 goods.setGoodsPrice(goodsPrice);
 
+                //调用保存处理
                 GoodsProcess goodsProcess = new GoodsProcess();
-                boolean c = goodsProcess.saveGoods(goods, imageByteArray);
+                boolean c;
+                c = (imageByteArray == null) ?
+                        goodsProcess.saveGoods(goods) :
+                        goodsProcess.saveGoods(goods, imageByteArray);
 
                 if (c){
                     JOptionPane.showMessageDialog(null,
@@ -142,7 +148,7 @@ public class AddGoods{
                 }
             }
         });
-
+        //取消按钮监听器
         cancelButton.addActionListener(e -> {
             mainFrame.dispose();
         });
@@ -165,7 +171,10 @@ public class AddGoods{
         });
     }
 
-    //文本框的检查，判断输入的数据格式是否都正确
+    /**
+     * 文本框的检查，判断输入的数据格式是否都正确
+     * @return ture，正确；false，错误
+     */
     private boolean check(){
         goodsId = goodsIdText.getText();
         goodsName = goodsNameText.getText();
@@ -202,7 +211,10 @@ public class AddGoods{
         return false;
     }
 
-    //获取主窗口属性
+    /**
+     * 获取主窗口属性
+     * @return 窗口
+     */
     Object getFrame(){
         return this.mainFrame;
     }

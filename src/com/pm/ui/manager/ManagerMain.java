@@ -9,69 +9,52 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class ManagerMain {
+public class ManagerMain extends JFrame{
 
-    private JFrame mainFrame;
     private JButton mUserButton;
     private JButton mOrderButton;
     private JButton mGoodsButton;
-    public Manager manager;
-
-
 
     public ManagerMain(){
-
-        /*//接受用户信息
-        this.manager = manager;*/
-
         mUserButton = new JButton("用户管理");
         mOrderButton = new JButton("订单管理");
         mGoodsButton = new JButton("商品管理");
 
-        mainFrame = new JFrame("管理员");
-        mainFrame.setSize(300,200);
-        mainFrame.setLayout(new GridLayout(3,1));
-        mainFrame.setResizable(false);
-        mainFrame.setLocationRelativeTo(null);
-        mainFrame.addWindowListener(new WindowAdapter() {
+        //设置主窗口属性
+        setTitle("管理员");
+        setSize(300,200);
+        setLayout(new GridLayout(3,1));
+        //不可调整
+        setResizable(false);
+        //居中显示
+        setLocationRelativeTo(null);
+        addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent){
                 System.exit(0);
             }
         });
-
-        //添加组件
-
-        mainFrame.add(mUserButton);
-        mainFrame.add(mGoodsButton);
-        mainFrame.add(mOrderButton);
-        mainFrame.setVisible(true);
+        //装载组件
+        add(mUserButton);
+        add(mGoodsButton);
+        add(mOrderButton);
+        setVisible(true);
     }
 
     public void go(){
-        mUserButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MUser mUser = new MUser();
-                mUser.go();
-            }
+        //用户管理监听器
+        mUserButton.addActionListener(e -> {
+            MUser mUser = new MUser();
+            mUser.go();
         });
-
-        mGoodsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MGoods mGoods = new MGoods();
-                mGoods.go();
-            }
+        //商品管理监听器
+        mGoodsButton.addActionListener(e -> {
+            MGoods mGoods = new MGoods();
+            mGoods.go();
         });
-
-        mOrderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MOrder morder = new MOrder();
-                morder.go();
-            }
+        //订单管理监听器
+        mOrderButton.addActionListener(e -> {
+            MOrder morder = new MOrder();
+            morder.go();
         });
-
     }
-
 }

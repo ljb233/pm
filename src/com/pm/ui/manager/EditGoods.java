@@ -14,6 +14,8 @@ public class EditGoods {
     private String goodsId = "";
     private String goodsName = "";
     private int goodsPrice;
+    private GoodsProcess goodsProcess;
+    private Goods goods;
 
     private JFrame mainFrame;
     private JPanel panel1;
@@ -51,33 +53,38 @@ public class EditGoods {
         confirmButton = new JButton("确定");
         cancelButton = new JButton("取消");
 
-        //组合组件
+
         panel1 = new JPanel();
         panel2 = new JPanel();
         panel3 = new JPanel();
         panel4 = new JPanel();
         panel5 = new JPanel();
 
-
+        //加载组件
         panel1.add(idLabel);
         panel1.add(idText);
+
         panel2.add(goodsIdLabel);
         panel2.add(goodsIdText);
+
         panel3.add(goodsNameLabel);
         panel3.add(goodsNameText);
+
         panel4.add(goodsPriceLabel);
         panel4.add(goodsPriceText);
+
         panel5.add(confirmButton);
         panel5.add(cancelButton);
 
+        //设置主窗口属性
         mainFrame = new JFrame("修改商品信息");
-
         mainFrame.setSize(300,200);
         mainFrame.setBounds(600,200,300,220);
         mainFrame.setLayout(new GridLayout(5,1));
         mainFrame.setResizable(false);
+        mainFrame.setLocationRelativeTo(null);
 
-        //添加组件
+        //加载组件
         mainFrame.add(panel1);
         mainFrame.add(panel2);
         mainFrame.add(panel3);
@@ -88,21 +95,18 @@ public class EditGoods {
 
     public void go(int id){
         this.ID = id;
-        GoodsProcess goodsProcess = new GoodsProcess();
-        Goods goods = goodsProcess.getGoods(ID);
-        idText.setText(String.valueOf(goods.getId()));
-        goodsIdText.setText(goods.getGoodsId());
-        goodsNameText.setText(goods.getGoodsName());
-        goodsPriceText.setText(String.valueOf(goods.getGoodsPrice()));
+        callBackData();
 
+        //确定按钮监听器
         confirmButton.addActionListener(e -> {
             if (check()){
+                //装载新数据
                 goods.setGoodsId(goodsId);
                 goods.setGoodsName(goodsName);
                 goods.setGoodsPrice(goodsPrice);
 
-                GoodsProcess goodsProcess1 = new GoodsProcess();
-                boolean c = goodsProcess1.updateGoods(goods);
+                //调用更新处理
+                boolean c = goodsProcess.updateGoods(goods);
 
                 if (c){
                     JOptionPane.showMessageDialog(null,
@@ -118,12 +122,23 @@ public class EditGoods {
                 }
             }
         });
-
+        //取消按钮监听器
         cancelButton.addActionListener(e -> mainFrame.dispose());
 
     }
 
-    public boolean check(){
+    //回显数据
+    private void callBackData(){
+        goodsProcess = new GoodsProcess();
+        goods = goodsProcess.getGoods(ID);
+        idText.setText(String.valueOf(goods.getId()));
+        goodsIdText.setText(goods.getGoodsId());
+        goodsNameText.setText(goods.getGoodsName());
+        goodsPriceText.setText(String.valueOf(goods.getGoodsPrice()));
+    }
+
+    //文本框的检查，判断输入的数据格式是否都正确
+    private boolean check(){
         goodsId = goodsIdText.getText();
         goodsName = goodsNameText.getText();
         boolean c = new Tools().isALLIntger(goodsId);
@@ -158,7 +173,7 @@ public class EditGoods {
     }
 
     //获取主窗口属性
-    public Object getFrame(){
+    Object getFrame(){
         return this.mainFrame;
     }
 }

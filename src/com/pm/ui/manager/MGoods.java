@@ -17,6 +17,7 @@ import java.util.Vector;
  * 管理商品的UI
  */
 public class MGoods {
+    private GoodsProcess goodsProcess;
     private JPanel jp1;
     private JPanel jp2;
     private JPanel jp3;
@@ -31,6 +32,7 @@ public class MGoods {
     private JButton nextPageButton;
     private JButton previousPageButton;
     private JButton lastPageButton;
+    private JScrollPane scrollPane;
 
     private JFrame mainFrame;
 
@@ -78,7 +80,7 @@ public class MGoods {
         //行单选
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         //表格载入滑动面板
-        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane = new JScrollPane(table);
 
 
         //加载组件
@@ -196,7 +198,6 @@ public class MGoods {
                 //获取商品ID后，跳转到修改UI
                 EditGoods editGoods = new EditGoods();
                 editGoods.go(ID);
-                //todo 重新设置刷新监听到确定按钮
                 //获取修改UI，添加窗口监听，当子窗口关闭后刷新table数据
                 JFrame frame = (JFrame) editGoods.getFrame();
                 frame.addWindowListener(new WindowListener() {
@@ -240,8 +241,6 @@ public class MGoods {
 
         //删除商品信息按钮的监听器
         deleGoodsButton.addActionListener(e -> {
-
-            GoodsProcess goodsProcess = new GoodsProcess();
 
             int result=JOptionPane.showConfirmDialog(null, "是否删除该商品？");
             if(result==0){
@@ -319,7 +318,7 @@ public class MGoods {
     }
 
     private void initGoodsList(){
-        GoodsProcess goodsProcess = new GoodsProcess();
+        goodsProcess = new GoodsProcess();
         this.goodsList = goodsProcess.getGoods();
     }
 
@@ -327,6 +326,7 @@ public class MGoods {
      *显示所有商品信息
      */
     private void showData(){
+        goodsList = goodsProcess.getGoods();
         DefaultTableModel defaultTableModel = (DefaultTableModel) table.getModel();
         //清楚原有数据
         defaultTableModel.setRowCount(0);

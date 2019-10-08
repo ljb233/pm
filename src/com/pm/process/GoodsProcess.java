@@ -26,8 +26,8 @@ public class GoodsProcess {
     }
 
     /**
-     * 获取所有的商品信息，返回商品列表
-     * @return
+     * 获取所有的商品信息
+     * @return 返回商品列表
      */
     public List<Goods> getGoods(){
         try {
@@ -39,18 +39,23 @@ public class GoodsProcess {
     }
 
     /**
-     * 通过商品ID查询，返回商品信息
-     * @param id
-     * @return
+     * 通过商品ID查询
+     * @param id 商品ID
+     * @return 返回商品信息
      */
     public Goods getGoods(int id) {
-        return goodsDAO.getGoodsByID(id);
+        try {
+            return goodsDAO.getGoodsByID(id);
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
      * 通过商品ID删除商品
-     * @param id
-     * @return
+     * @param id 商品ID
+     * @return 返回商品信息
      */
     public boolean deleGoods(int id) {
         Transaction transaction = session.beginTransaction();
@@ -60,7 +65,6 @@ public class GoodsProcess {
             return true;
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -76,7 +80,6 @@ public class GoodsProcess {
             return true;
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -84,10 +87,11 @@ public class GoodsProcess {
     /**
      * 保存所有商品信息,并添加图片信息
      */
-    public boolean saveGoods(Goods goods, byte[] data) {
+    public boolean saveGoods(Goods goods, byte[] imageByteArray) {
         Transaction transaction = session.beginTransaction();
         try {
-            goods.setPicStream(Hibernate.getLobCreator(session).createBlob(data));
+            //转换图片信息为BOLB类型
+            goods.setPicStream(Hibernate.getLobCreator(session).createBlob(imageByteArray));
             goodsDAO.insertGoods(goods);
             transaction.commit();
             return true;
@@ -109,8 +113,14 @@ public class GoodsProcess {
             return true;
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e.getMessage());
             return false;
         }
+    }
+
+    /**
+     * 关闭Session
+     */
+    void close(){
+        session.close();
     }
 }
