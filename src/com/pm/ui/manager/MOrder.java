@@ -36,20 +36,20 @@ public class MOrder {
 
     public MOrder() {
         //初始化
-        searchText=new JTextField(10);
+        searchText = new JTextField(10);
         editB = new JButton("状态更改");
         searchB = new JButton("查询");
         topPageB = new JButton("首页");
         lastPageB = new JButton("上一页");
         nextPageB = new JButton("下一页");
         endPageB = new JButton("尾页");
-        jPanelButtonTop=new JPanel();
+        jPanelButtonTop = new JPanel();
         jPanelTable = new JPanel();
         jPanelButton = new JPanel();
 
 
         //订单表格
-        String[] columnNames={
+        String[] columnNames = {
                 "订单ID",
                 "下单时间",
                 "完成时间",
@@ -58,11 +58,11 @@ public class MOrder {
                 "下单用户"
         };
 
-        jTable = new JTable(null,columnNames){
+        jTable = new JTable(null, columnNames) {
             //禁止编辑单元格
             @Override
-            public boolean isCellEditable(int row,int column){
-                return  false;
+            public boolean isCellEditable(int row, int column) {
+                return false;
             }
         };
         jTable.setModel(new DefaultTableModel(null,
@@ -104,29 +104,32 @@ public class MOrder {
 
 
     }
+
     //当前页
-    public int getCurrentPage(){
+    public int getCurrentPage() {
         return currentPage;
     }
 
-    public void setCurrentPage(int currentPage){
-        this.currentPage=currentPage;
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
     }
+
     //首页
-    public int getFirstPage(){
+    public int getFirstPage() {
         return firstPage;
     }
 
-    public void setFirstPage(int firstPage){
-        this.firstPage=firstPage;
+    public void setFirstPage(int firstPage) {
+        this.firstPage = firstPage;
     }
+
     //尾页
-    public int getLastPage(){
+    public int getLastPage() {
         return lastPage;
     }
 
-    public void setLastPage(int lastPage){
-        this.lastPage=lastPage;
+    public void setLastPage(int lastPage) {
+        this.lastPage = lastPage;
     }
 
     public void go() {
@@ -141,14 +144,14 @@ public class MOrder {
             public void actionPerformed(ActionEvent actionEvent) {
                 String orderid = jTable.getValueAt(jTable.getSelectedRow(),
                         0).toString();
-                if(orderid.isEmpty()){
+                if (orderid.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "请选择订单!",
                             "警告",
                             JOptionPane.WARNING_MESSAGE);
-                }else {
-                    int OID=Integer.parseInt(orderid);
-                    EditOrder editOrder =new EditOrder();
+                } else {
+                    int OID = Integer.parseInt(orderid);
+                    EditOrder editOrder = new EditOrder();
                     editOrder.go(OID);
                 }
             }
@@ -172,10 +175,10 @@ public class MOrder {
         lastPageB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (getCurrentPage()>getFirstPage()){
-                    setCurrentPage(currentPage-1);
+                if (getCurrentPage() > getFirstPage()) {
+                    setCurrentPage(currentPage - 1);
                     showData();
-                }else {
+                } else {
                     setCurrentPage(firstPage);
                     showData();
                 }
@@ -185,10 +188,10 @@ public class MOrder {
         nextPageB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                if (getCurrentPage()<getLastPage()){
-                    setCurrentPage(currentPage+1);
+                if (getCurrentPage() < getLastPage()) {
+                    setCurrentPage(currentPage + 1);
                     showData();
-                }else {
+                } else {
                     setCurrentPage(lastPage);
                     showData();
                 }
@@ -205,37 +208,37 @@ public class MOrder {
 
 
     }
-    //初始化分页
-    public void initPageNumber(){
-        this.firstPage=1;
-        this.tableRows=5;
-        this.currentPage=firstPage;
 
-        if(this.orderList.size()%this.tableRows==0){
-            this.lastPage=this.orderList.size()/this.tableRows;
-        }else {
-            this.lastPage=this.orderList.size()/this.tableRows+1;
+    //初始化分页
+    public void initPageNumber() {
+        this.firstPage = 1;
+        this.tableRows = 5;
+        this.currentPage = firstPage;
+
+        if (this.orderList.size() % this.tableRows == 0) {
+            this.lastPage = this.orderList.size() / this.tableRows;
+        } else {
+            this.lastPage = this.orderList.size() / this.tableRows + 1;
         }
     }
 
-    public void setOrderList(){
-        OrderInfProcess orderInfProcess=new OrderInfProcess();
-        this.orderList=orderInfProcess.getAllOrderInf();
+    public void setOrderList() {
+        OrderInfProcess orderInfProcess = new OrderInfProcess();
+        this.orderList = orderInfProcess.getAllOrderInf();
     }
 
 
-
     //显示订单信息
-    public void showData(){
+    public void showData() {
 
-        DefaultTableModel defaultTableModel =(DefaultTableModel)jTable.getModel();
+        DefaultTableModel defaultTableModel = (DefaultTableModel) jTable.getModel();
         defaultTableModel.setRowCount(0);
 
         //分页
-        Page page= new Page(tableRows);
-        List<VOrderinfId> list=page.cutList(currentPage,orderList);
+        Page page = new Page(tableRows);
+        List<VOrderinfId> list = page.cutList(currentPage, orderList);
 
-        for (VOrderinfId vOrderinfId:list){
+        for (VOrderinfId vOrderinfId : list) {
             Vector v = new Vector();
             v.add(vOrderinfId.getoId());
             v.add(vOrderinfId.getCreateDate());
