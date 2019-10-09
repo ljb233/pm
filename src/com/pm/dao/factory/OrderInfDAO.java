@@ -41,6 +41,11 @@ public class OrderInfDAO {
         query.setParameter(1,uId);
         return query.list();
     }
+    public List<VOrderinfId> getOrderByUIdD(int uId){
+        Query query = session.createQuery("from VOrderinfId where  userId = ?1 and osId != 5");
+        query.setParameter(1,uId);
+        return query.list();
+    }
 }
 
 

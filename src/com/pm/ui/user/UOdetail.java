@@ -1,8 +1,12 @@
 package com.pm.ui.user;
 import com.pm.dao.datasource.VOrderinfId;
+import com.pm.process.OrderProcess;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class UOdetail extends JFrame {
     private VOrderinfId vo;
 
@@ -79,6 +83,58 @@ public class UOdetail extends JFrame {
     }
     public void go(){
         this.setVisible(true);//设置dialog显示
-    };
+        butCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+                    int ID = Integer.valueOf(vo.getoId());
+                    OrderProcess op = new OrderProcess();
+                    if (op.cancelOrder(ID) == true) {
+
+                        JOptionPane.showMessageDialog(null, "操作成功");
+                    } else {
+
+
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可取消");
+                    }
+                } catch (Exception el) {
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            }
+        });
+
+        butDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+
+
+                    int ID = Integer.valueOf(vo.getoId());
+                    OrderProcess op = new OrderProcess();
+                    if (op.deleteOrder(ID) == true) {
+                        JOptionPane.showMessageDialog(null, "操作成功该订单已删除");
+                        UOdetail.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可删除");
+                    }
+                } catch (Exception el) {
+                    el.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+
+    }
 }
 
