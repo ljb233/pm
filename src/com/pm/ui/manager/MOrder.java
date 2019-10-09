@@ -39,7 +39,7 @@ public class MOrder {
     public MOrder() {
         //初始化
         searchText=new JTextField(10);
-        editB = new JButton("状态更改");
+        editB = new JButton("详情");
         searchB = new JButton("查询");
         topPageB = new JButton("首页");
         lastPageB = new JButton("上一页");
@@ -93,74 +93,116 @@ public class MOrder {
         jPanelTable.add(scrollPane);
 
         jFrame = new JFrame("订单信息");
+        //尺寸
         jFrame.setSize(500,
                 500);
+        //布局
         jFrame.setLayout(new GridLayout(3,
                 1));
         //jFrame.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
+        //窗口不可改变
         jFrame.setResizable(false);
+        //居中
         jFrame.setLocationRelativeTo(null);
 
+        //部署
         jFrame.add(jPanelButtonTop);
         jFrame.add(jPanelTable);
         jFrame.add(jPanelButton);
+        //显示窗口
         jFrame.setVisible(true);
 
 
     }
-    //获取搜索框值
+
+    /**
+     * 获取搜索框值
+     */
     public void findOrderId(){
         intOId =Integer.parseInt(searchText.getText());
     }
-    //当前页
+
+    /**
+     * 获取当前页
+     * @return currentPage
+     */
     public int getCurrentPage(){
         return currentPage;
     }
 
+    /**
+     * 设置当前页
+     * @param currentPage
+     */
     public void setCurrentPage(int currentPage){
         this.currentPage=currentPage;
     }
-    //首页
+
+    /**
+     *获取首页
+     * @return firstPage
+     */
     public int getFirstPage(){
         return firstPage;
     }
 
+    /**
+     * 设置首页
+     * @param firstPage
+     */
     public void setFirstPage(int firstPage){
         this.firstPage=firstPage;
     }
-    //尾页
+
+    /**
+     * 获取尾页
+     * @return lastPage
+     */
     public int getLastPage(){
         return lastPage;
     }
 
+    /**
+     * 设置尾页
+     * @param lastPage
+     */
     public void setLastPage(int lastPage){
         this.lastPage=lastPage;
     }
 
+    /**
+     * 功能实现
+     */
     public void go() {
         //方法调用
         setOrderList();
         initPageNumber();
         showData();
 
-        //修改按钮功能
+        /**
+         * 修改按钮监听,
+         */
         editB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                //获取下拉框值,存入orderid
                 String orderid = jTable.getValueAt(jTable.getSelectedRow(),
                         0).toString();
+                //判断是否为空
                 if(orderid.isEmpty()){
                     JOptionPane.showMessageDialog(null,
                             "请选择订单!",
                             "警告",
                             JOptionPane.WARNING_MESSAGE);
                 }else {
+                    //执行修改
                     int OID=Integer.parseInt(orderid);
-                    EditOrder editOrder =new EditOrder();
-                    editOrder.go(OID);
+                    Details details =new Details();
+                    details.go(OID);
 
                     //刷新
-                    JFrame frame = (JFrame)editOrder.getFrame();
+                    JFrame frame = (JFrame) details.getFrame();
+                    //编辑窗体监听,当关闭编辑窗体时刷新
                     frame.addWindowListener(new WindowListener() {
                         @Override
                         public void windowOpened(WindowEvent windowEvent) {
@@ -202,7 +244,9 @@ public class MOrder {
 
             }
         });
-        //查询按钮功能
+        /**
+         * 搜索按钮监听
+         */
         searchB.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {

@@ -19,7 +19,8 @@ public class UOrder extends JDialog {
     private JPanel jplPane1;
     private JPanel jplPane2;
     private JTable table;
-    private JButton btnEdit;
+    private JButton btnCancel;
+    private JButton btnDelete;
     private Object[][] data;
     private User loginUser;
 
@@ -28,6 +29,9 @@ public class UOrder extends JDialog {
         loginUser = user;
         jplPane1 = new JPanel();
         jplPane2 = new JPanel();
+        btnCancel = new JButton("取消订单");
+        btnDelete = new JButton("删除订单");
+
         //设置表格
         String[] columnNames = {"ID", "订单号", "商品名", "状态"};
         table = new JTable(data, columnNames) {
@@ -38,6 +42,7 @@ public class UOrder extends JDialog {
             }
 
         };
+        ;
         table.setModel(new DefaultTableModel(data, columnNames));
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setSize(300, 600);
@@ -45,20 +50,18 @@ public class UOrder extends JDialog {
         table.setAutoCreateRowSorter(true);
 
         table.getTableHeader().setReorderingAllowed(false);
-
         //添加组件.
         jplPane1.add(Box.createGlue()); // 挤占用户管理按钮和窗口左侧空间
         // 按钮之间的水平距离
-        btnEdit = new JButton("修改密码");
+        jplPane1.add(btnCancel);
         jplPane1.add(Box.createHorizontalStrut(20));
-        jplPane1.add(btnEdit);
+        jplPane1.add(btnDelete);
         jplPane1.add(Box.createGlue());
         jplPane2.add(scrollPane);
 
         add(jplPane1);
         add(jplPane2);
-
-        setTitle("个人主页");// 标题
+        setTitle("我的订单");// 标题
         setSize(500, 400);// 窗口大小
         setLayout(new GridLayout(3, 1));
         setResizable(false);
@@ -68,6 +71,59 @@ public class UOrder extends JDialog {
 
     public void go() {
         showData();
+        btnCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+                    String id = table.getValueAt(table.getSelectedRow(), 0).toString();
+                    int ID = Integer.valueOf(id);
+                    OrderProcess op = new OrderProcess();
+                    if (op.cancelOrder(ID) == true) {
+
+                        JOptionPane.showMessageDialog(null, "操作成功");
+                    } else {
+
+
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可取消");
+                    }
+                    ;
+
+                    showData();
+                } catch (Exception el) {
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            }
+        });
+
+        btnDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+                    String id = table.getValueAt(table.getSelectedRow(), 0).toString();
+                    int ID = Integer.valueOf(id);
+                    OrderProcess op = new OrderProcess();
+                    if (op.deleteOrder(ID) == true) {
+                        showData();
+                        JOptionPane.showMessageDialog(null, "操作成功该订单已删除");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可删除");
+                    }
+                } catch (Exception el) {
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
 
         table.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

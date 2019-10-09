@@ -44,7 +44,7 @@ public class OrderInfProcess {
     }
 
     public List<VOrderinfId> getOrderInfByUId(int uId) {
-        List<VOrderinfId> list = orderInfDAO.getOrderByUIdD(uId);
+        List<VOrderinfId> list = orderInfDAO.getOrderByUId(uId);
 
         return list;
 
