@@ -1,10 +1,13 @@
 package com.pm.process;
 
+import com.pm.dao.datasource.Point;
 import com.pm.dao.factory.PointDao;
 import com.pm.dao.factory.UserDAO;
 import com.pm.util.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import java.util.List;
 
 /**
  * 积分处理过程
@@ -40,6 +43,15 @@ public class PointProcess {
             transaction.rollback();
             System.out.println(e.getMessage());
             return false;
+        }
+    }
+
+    public List<Point> getAllPoints() {
+        try {
+            return pointDao.getAllPoints();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
