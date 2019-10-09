@@ -1,8 +1,6 @@
 package com.pm.ui.user;
 import com.pm.dao.datasource.User;
-import com.pm.dao.factory.EditDAO;
-import com.pm.dao.factory.UserDAO;
-import com.pm.process.EditProcess;
+import com.pm.process.UserProcess;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,16 +30,19 @@ public class EditPwd extends JFrame {
     private JButton confirmButton;
     private JButton cancelButton;
 
+    private User loginUser;
 
-    public EditPwd() {
+
+    public EditPwd(User user) {
+        loginUser = user;
         //初始化窗口
-        oldpasswordField = new JPasswordField(10);
+        oldpasswordField = new JPasswordField(15);
         oldpasswordLabel = new JLabel("旧密码");
 
-        newpasswordField = new JPasswordField(10);
+        newpasswordField = new JPasswordField(15);
         newpasswordLabel = new JLabel("新密码");
 
-        repasswordField = new JPasswordField(10);
+        repasswordField = new JPasswordField(15);
         repasswordLabel = new JLabel("确认密码");
 
         confirmButton = new JButton("确定");
@@ -67,8 +68,10 @@ public class EditPwd extends JFrame {
         //设置主窗口属性
         mainFrame = new JFrame("修改密码");
         mainFrame.setSize(300, 200);
-        mainFrame.setBounds(600, 200, 300, 220);
-        mainFrame.setLayout(new GridLayout(4, 1));
+        //mainFrame.setBounds(600, 200, 300, 220);
+        //mainFrame.setLayout(new GridLayout(4, 1));
+        mainFrame.setLocationRelativeTo(null);
+        mainFrame.setLayout(new FlowLayout(FlowLayout.CENTER));
         mainFrame.setResizable(false);
         mainFrame.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent windowEvent) {
@@ -88,33 +91,39 @@ public class EditPwd extends JFrame {
     public void Edit() {
         //监听登录按钮
         confirmButton.addActionListener(e -> {
-            //获取数据
-            String pwd = User.getUserPwd();
-            int username = User.getId();
-            new String(oldpasswordField.getPassword());
-            new String(newpasswordField.getPassword());
-            new String(repasswordField.getPassword());
+            //获取数
+            int id = loginUser.getId();
+            String pwd = loginUser.getUserPwd();
+            String oldpwd = new String(oldpasswordField.getPassword());
+            String newpwd = new String(newpasswordField.getPassword());
+            String repwd = new String(repasswordField.getPassword());
 
             if (check()) {
                 if (oldpwd.equals(pwd)) {//旧密码与原密码是否一致
                     if (newpwd.equals(repwd)) {//两个新密码是否一致
                         if (!(newpwd.equals(pwd))) {
-                            EditProcess editProcess = new EditProcess();
-                            editProcess.editpwd(username,newpwd);
-                            JOptionPane.showMessageDialog(null, "密码修改成功！", "友情提示",
+                            UserProcess userProcess = new UserProcess();
+                            userProcess.editpwdUser(id,newpwd);
+                            JOptionPane.showMessageDialog(null,
+                                    "密码修改成功！",
+                                    "友情提示",
                                     JOptionPane.INFORMATION_MESSAGE);
+                            mainFrame.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null,
-                                    "您新密码与旧密码相同，请确认后重新输入！", "友情提示",
+                                    "您新密码与旧密码相同，请确认后重新输入！",
+                                    "友情提示",
                                     JOptionPane.INFORMATION_MESSAGE);
                         }
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "您两次输入的新密码不一致，请确认后重新输入！", "友情提示",
+                                "您两次输入的新密码不一致，请确认后重新输入！",
+                                "友情提示",
                                 JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "您输入的原密码错误，请确认后重新输入！",
+                    JOptionPane.showMessageDialog(null,
+                            "您输入的原密码错误，请确认后重新输入！",
                             "友情提示", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
