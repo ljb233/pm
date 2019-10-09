@@ -1,5 +1,6 @@
 package com.pm.ui.manager;
 
+import com.pm.dao.datasource.Point;
 import com.pm.dao.datasource.User;
 import com.pm.process.PointProcess;
 import com.pm.process.UserProcess;
@@ -401,6 +402,13 @@ public class MUser {
         Page page = new Page(tableRows);
         List<User> list =  page.cutList(currentPage, userList);
 
+        PointProcess pointProcess = new PointProcess();
+        List<Point> points = pointProcess.getAllPoints();
+
+        for(int i=0; i<list.size(); i++){
+            list.get(i).setUserPwd(String.valueOf(points.get(i).getPointValue()));
+        }
+
         for (User userInf : list) {
             Vector v = new Vector();
             v.add(userInf.getId());
@@ -410,8 +418,7 @@ public class MUser {
             }else {
                 v.add(FROZEN);
             }
-            PointProcess pointProcess = new PointProcess();
-            v.add(pointProcess.getallpoint(userInf.getId()));
+            v.add(userInf.getUserPwd());
             defaultTableModel.addRow(v);
         }
     }

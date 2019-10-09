@@ -4,6 +4,8 @@ import com.pm.dao.datasource.Point;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 /**
  * 操作数据库中积分表
  *@Auther: linyang
@@ -44,5 +46,10 @@ public class PointDao {
      */
     public void insertUsertopoint(Point b) {
         session.save(b);
+    }
+
+    public List<Point> getAllPoints() {
+        Query<Point> query = session.createQuery("from Point ", Point.class);
+        return query.getResultList();
     }
 }
