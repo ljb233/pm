@@ -37,6 +37,17 @@ public class GoodsDAO {
     }
 
     /**
+     * 获取指定商品编号的商品信息
+     * @param GoodsId 商品编号
+     * @return 商品信息
+     */
+    public Goods getGoodsByGoodsId(String GoodsId){
+        Query query = session.createQuery("from Goods where goodsId = ?1 and isDele = 0");
+        query.setParameter(1,GoodsId);
+        return (Goods) query.uniqueResult();
+    }
+
+    /**
      * 指定ID删除商品
      * @param id id
      */

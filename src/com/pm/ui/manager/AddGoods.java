@@ -129,18 +129,23 @@ public class AddGoods extends JFrame{
 
                 //调用保存处理
                 GoodsProcess goodsProcess = new GoodsProcess();
-                boolean c;
+                int c;
                 c = (imageByteArray == null) ?
                         goodsProcess.saveGoods(goods) :
                         goodsProcess.saveGoods(goods, imageByteArray);
 
-                if (c){
+                if (c == 1){
                     JOptionPane.showMessageDialog(null,
                             "添加成功！",
                             "注意",
                             JOptionPane.WARNING_MESSAGE);
                     mainFrame.dispose();
-                }else{
+                }else if(c == 2){
+                    JOptionPane.showMessageDialog(null,
+                            "商品已存在！",
+                            "注意",
+                            JOptionPane.WARNING_MESSAGE);
+                }else {
                     JOptionPane.showMessageDialog(null,
                             "添加失败！",
                             "注意",

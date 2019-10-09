@@ -33,7 +33,6 @@ public class GoodsProcess {
         try {
             return goodsDAO.getAllGoods();
         }catch (Exception e){
-            e.printStackTrace();
             return null;
         }
     }
@@ -47,7 +46,6 @@ public class GoodsProcess {
         try {
             return goodsDAO.getGoodsByID(id);
         }catch (Exception e){
-            e.printStackTrace();
             return null;
         }
     }
@@ -55,7 +53,8 @@ public class GoodsProcess {
     /**
      * 通过商品ID删除商品
      * @param id 商品ID
-     * @return 返回商品信息
+     * @return true：成功
+     *         false：发生错误
      */
     public boolean deleGoods(int id) {
         Transaction transaction = session.beginTransaction();
@@ -71,39 +70,58 @@ public class GoodsProcess {
 
     /**
      * 保存所有商品信息
+     * @param goods 商品
+     * @return 1：成功
+     *         2：商品已存在
+     *         3：发生错误
      */
-    public boolean saveGoods(Goods goods) {
+    public int saveGoods(Goods goods) {
         Transaction transaction = session.beginTransaction();
         try {
-            goodsDAO.insertGoods(goods);
-            transaction.commit();
-            return true;
+            //判断是否商品是否已经存在
+            if (goodsDAO.getGoodsByGoodsId(goods.getGoodsId()) == null){
+                goodsDAO.insertGoods(goods);
+                transaction.commit();
+                return 1;
+            }else {
+                return 2;
+            }
         } catch (Exception e) {
             transaction.rollback();
-            return false;
+            return 3;
         }
     }
 
     /**
      * 保存所有商品信息,并添加图片信息
+     * @param goods 商品
+     * @return 1：成功
+     *         2：商品已存在
+     *         3：发生错误
      */
-    public boolean saveGoods(Goods goods, byte[] imageByteArray) {
+    public int saveGoods(Goods goods, byte[] imageByteArray) {
         Transaction transaction = session.beginTransaction();
         try {
-            //转换图片信息为BOLB类型
-            goods.setPicStream(Hibernate.getLobCreator(session).createBlob(imageByteArray));
-            goodsDAO.insertGoods(goods);
-            transaction.commit();
-            return true;
+            if (goodsDAO.getGoodsByGoodsId(goods.getGoodsId()) == null){
+                //转换图片信息为BOLB类型
+                goods.setPicStream(Hibernate.getLobCreator(session).createBlob(imageByteArray));
+                goodsDAO.insertGoods(goods);
+                transaction.commit();
+                return 1;
+            }else {
+                return 2;
+            }
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e.getMessage());
-            return false;
+            return 3;
         }
     }
 
     /**
      * 更新所有商品信息
+     * @param goods 商品
+     * @return true：成功
+     *         false：发生错误
      */
     public boolean updateGoods(Goods goods) {
         Transaction transaction = session.beginTransaction();
