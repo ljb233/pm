@@ -14,7 +14,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Vector;
 
-public class UOrder extends JFrame {
+public class UOrder extends JDialog {
     private static final long serialVersionUID = 9527L;
     private JPanel jplPane1;
     private JPanel jplPane2;
