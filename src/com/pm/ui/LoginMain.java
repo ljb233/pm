@@ -98,16 +98,21 @@ public class LoginMain extends JFrame {
                 if (userRadioButton.isSelected()) {
                     UserProcess up = new UserProcess();
                     User user = up.userLogin(account, password);
-                    if (user != null) {
-                        //隐藏窗口
-                        dispose();
-                        UserMain UM = new UserMain(user);
-                        UM.go();
-                    } else {
+                    if (user == null) {
                         JOptionPane.showMessageDialog(null,
                                 "用户名或密码错误！",
                                 "注意",
                                 JOptionPane.WARNING_MESSAGE);
+                    } else if(user.getIsFreeze() == 1){
+                        JOptionPane.showMessageDialog(null,
+                                "用户已冻结！",
+                                "注意",
+                                JOptionPane.WARNING_MESSAGE);
+                    }else {
+                        //隐藏窗口
+                        dispose();
+                        UserMain UM = new UserMain(user);
+                        UM.go();
                     }
                 } else {
                     //查询用户信息
