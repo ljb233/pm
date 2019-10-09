@@ -82,6 +82,28 @@ public class OrderProcess {
 
     }
 
+    //完成订单。
+
+    public boolean accomplishOrder(int orderId) {
+        org.hibernate.Transaction tx = session.beginTransaction();
+        try {
+            int status = orderDAO.getOrderById(orderId).getOsId();
+            if (status != 2)
+
+                return false;
+            else {
+                orderDAO.updateOrderStatus(orderId, 3);
+                tx.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
     //删除订单
     public boolean deleteOrder(int orderId) {
         org.hibernate.Transaction tx = session.beginTransaction();

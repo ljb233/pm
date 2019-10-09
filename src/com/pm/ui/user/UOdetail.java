@@ -141,6 +141,32 @@ public class UOdetail extends JFrame {
             }
         });
 
+        butAccomplish.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+
+
+                    int ID = Integer.valueOf(vo.getoId());
+                    OrderProcess op = new OrderProcess();
+                    if (op.accomplishOrder(ID) == true) {
+                        Uorder.showData();
+                        JOptionPane.showMessageDialog(null, "操作成功该订单已完成");
+                        UOdetail.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可完成");
+                    }
+                } catch (Exception el) {
+                    el.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
     }
 }
 
