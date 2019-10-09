@@ -45,16 +45,7 @@ public class OrderInfProcess {
 
     public List<VOrderinfId> getOrderInfByUId(int uId) {
         List<VOrderinfId> list = orderInfDAO.getOrderByUId(uId);
-        int j = 0;
-        for (int i = 0; i < list.size(); i++) {
 
-            if (list.get(j).getOsType().equals("已删除")) {
-                list.remove(j);
-                j--;
-            }
-            j++;
-            //这里使用list.remove(O)会抛异常有时间再处理
-        }
         return list;
 
     }
