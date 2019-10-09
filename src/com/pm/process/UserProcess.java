@@ -28,7 +28,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO：获取所有用户
+     * 获取所有用户
      * @return AllUsers
      */
     public List<User> getAllUsers() {
@@ -41,7 +41,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:登录
+     * 登录
      * @param name
      * @param pwd
      * @return user
@@ -57,7 +57,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:冻结用户
+     * 冻结用户
      * @param id
      * @return boolean
      */
@@ -75,7 +75,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:解冻用户
+     * 解冻用户
      * @param id
      * @return boolean
      */
@@ -93,7 +93,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:重置用户密码
+     * 重置用户密码
      * @param id
      * @param pwd
      * @return boolean
@@ -112,7 +112,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:增加用户
+     * 增加用户
      * @param user
      * @return boolean
      */
@@ -130,7 +130,7 @@ public class UserProcess {
     }
 
     /**
-     * @DO:搜索用户
+     * 搜索用户
      * @param user
      * @return user2
      */

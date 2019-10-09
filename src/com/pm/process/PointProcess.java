@@ -25,7 +25,7 @@ public class PointProcess {
     }
 
     /**
-     * @DO:积分增加处理
+     * 积分增加处理
      * @param addValue
      * @param id
      * @return boolean
@@ -46,6 +46,10 @@ public class PointProcess {
         }
     }
 
+    /**
+     * 获取积分表
+     * @return Allpoints
+     */
     public List<Point> getAllPoints() {
         try {
             return pointDao.getAllPoints();
@@ -56,7 +60,7 @@ public class PointProcess {
     }
 
     /**
-     * @DO:通过用户id获取积分值
+     * 通过用户id获取积分值
      * @param id
      * @return PointValue
      */

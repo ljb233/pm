@@ -18,7 +18,7 @@ public class PointDao {
     }
 
     /**
-     * @DO:通过用户id获得该用户的积分信息
+     * 通过用户id获得该用户的积分信息
      * @param id
      * @return Point
      */
@@ -29,7 +29,7 @@ public class PointDao {
     }
 
     /**
-     * @DO:将增加后的积分插入到id对应的用户
+     * 将增加后的积分插入到id对应的用户
      * @param updatetotal
      * @param id
      */
@@ -41,13 +41,17 @@ public class PointDao {
     }
 
     /**
-     * @DO:增加用户的同时，存入积分信息
+     * 增加用户的同时，存入积分信息
      * @param b
      */
     public void insertUsertopoint(Point b) {
         session.save(b);
     }
 
+    /**
+     * 获取积分表
+     * @return list
+     */
     public List<Point> getAllPoints() {
         Query<Point> query = session.createQuery("from Point ", Point.class);
         return query.getResultList();
