@@ -404,7 +404,7 @@ public class MUser {
 
         PointProcess pointProcess = new PointProcess();
         List<Point> points = pointProcess.getAllPoints();
-
+        //让积分值覆盖用户的password，不做数据提交，暂存
         for(int i=0; i<list.size(); i++){
             list.get(i).setUserPwd(String.valueOf(points.get(i).getPointValue()));
         }
@@ -413,7 +413,7 @@ public class MUser {
             Vector v = new Vector();
             v.add(userInf.getId());
             v.add(userInf.getUserName());
-            if(userInf.getIsFreeze()==0){
+            if(userInf.getIsFreeze()==0){//将数据库中用户状态0，1进行相应转换
                 v.add(NORMAL);
             }else {
                 v.add(FROZEN);

@@ -2,7 +2,6 @@ package com.pm.dao.factory;
 
 import com.pm.dao.datasource.User;
 import org.hibernate.Session;
-import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:通过用户名查询该用户
+     * 通过用户名查询该用户
      * @param userName
      * @return User
      */
@@ -30,7 +29,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:获取所有用户
+     * 获取所有用户
      * @return AllUsers
      */
     public List<User> getAllUsers() {
@@ -39,7 +38,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:增加用户
+     * 增加用户
      * @param b
      */
     public void insertUser(User b) {
@@ -47,7 +46,7 @@ public class UserDAO {
     }
 
     /**
-     * @TODO:登录
+     * 登录
      * @param name
      * @param pwd
      * @return user
@@ -61,7 +60,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:通过id冻结用户
+     * 通过id冻结用户
      * @param id
      */
     public void frzzeeUser(int id) {
@@ -71,7 +70,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:通过id解冻用户
+     * 通过id解冻用户
      * @param id
      */
     public void stopfrzzeeUser(int id) {
@@ -81,7 +80,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:重置用户密码
+     * 重置用户密码
      * @param id
      * @param pwd
      */
