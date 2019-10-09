@@ -17,11 +17,11 @@ public class UserMain extends JFrame{
     private JButton uOrderButton;
     //private JButton uGoodsButton;
     public Manager manager;
-    public User user = null;
+    public User loginUser = null;
 
 
     public UserMain(User user){
-        this.user = user;
+        this.loginUser = user;
         uUserButton = new JButton("修改密码");
         uOrderButton = new JButton("个人订单");
         //uGoodsButton = new JButton("商品兑换");
@@ -49,8 +49,8 @@ public class UserMain extends JFrame{
         uUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //EditPwd editPwd = new EditPwd(user);
-                //uChangePwd.go();
+                EditPwd editPwd = new EditPwd(loginUser);
+                editPwd.Edit();
             }
         });
 
@@ -65,7 +65,7 @@ public class UserMain extends JFrame{
         uOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UOrder uOrder = new UOrder(user);
+                UOrder uOrder = new UOrder(loginUser);
                 uOrder.go();
             }
         });
