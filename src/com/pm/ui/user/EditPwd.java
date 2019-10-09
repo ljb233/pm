@@ -5,13 +5,12 @@ import com.pm.process.UserProcess;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
 
 public class EditPwd extends JFrame {
-    private String oldpwd = " ";
-    private String newpwd = " ";
-    private String repwd = " ";
+    private String oldpwd = "";
+    private String newpwd = "";
+    private String repwd = "";
 
     private JFrame mainFrame;
     private JPanel panel1;
@@ -69,16 +68,10 @@ public class EditPwd extends JFrame {
         //设置主窗口属性
         mainFrame = new JFrame("修改密码");
         mainFrame.setSize(300, 200);
-        //mainFrame.setBounds(600, 200, 300, 220);
-        //mainFrame.setLayout(new GridLayout(4, 1));
         mainFrame.setLocationRelativeTo(null);
         mainFrame.setLayout(new FlowLayout(FlowLayout.CENTER));
         mainFrame.setResizable(false);
-        mainFrame.addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent) {
-                System.exit(0);
-            }
-        });
+
 
         //添加组件
         mainFrame.add(panel1);
