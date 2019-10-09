@@ -1,56 +1,140 @@
 package com.pm.ui.user;
-
-import com.pm.dao.datasource.Order;
-import com.pm.dao.datasource.VOrderinf;
 import com.pm.dao.datasource.VOrderinfId;
+import com.pm.process.OrderProcess;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class UOdetail extends JFrame {
     private VOrderinfId vo;
 
+    private JPanel JPTable,JPBut;
+    private JLabel JLNum,JLUserName,JLGoodsName,JLPrice,JLCTime,JLETime,JLStatus;
+    private JTextField JTNum,JTUserName,JTGoodsName,JTPrice,JTCTime,JTETime,JTStatus;
+    private JButton butDelete,butCancel,butAccomplish;
     public UOdetail(VOrderinfId vo){
         this.vo = vo;
-        this.setLayout(new GridLayout(7,2));   /*设置布局，三行三列*/
-        this.setPreferredSize(new Dimension(270, 350));//设置大小
         this.setTitle("订单详情");
-
+        this.setLayout(new BorderLayout());
         this.pack();
         this.setLocationRelativeTo(null);
-        JButton but=new JButton("订单号");
-        JLabel jLabel= new JLabel(vo.getOrderId());
-        JButton but1=new JButton("用户名");
-        JLabel jLabel1=new JLabel(vo.getUserName());
-        JButton but2=new JButton("商品名");
-        JLabel jLabel2=new JLabel(vo.getGoodsName());
-        JButton but3=new JButton("兑换价格");
-        JLabel jLabel3 = new JLabel(vo.getGoodsPrice()+"");
+        this.setSize(320,340);
+        JPTable = new JPanel();
+        JPTable.setLayout(new GridLayout(7,2));
 
-        JButton but4=new JButton("创建时间");
-        JLabel jLabel4=new JLabel(vo.getCreateDate()+"");
-        JButton but5=new JButton("完成时间");
-        JLabel jLabel5=new JLabel(vo.getCompDate()+"");
-        JButton but6=new JButton("订单状态");
-        JLabel jLabel6=new JLabel(vo.getOsType());
-        add(but);
-        add(jLabel);
-        add(but1);
-        add(jLabel1);
-        add(but2);
-        add(jLabel2);
-        add(but3);
-        add(jLabel3);
-        add(but4);
-        add(jLabel4);
-        add(but5);
-        add(jLabel5);
+        JPTable.setVisible(true);
+        JPTable.setSize(240,300);
+        JLNum=new JLabel("订单号",JLabel.CENTER);
+        JTNum= new JTextField(vo.getOrderId());
+        JTNum.setEditable(false);
+        JLUserName=new JLabel("用户名",JLabel.CENTER);
 
-        add(but6);
-        add(jLabel6);
+        JTUserName=new JTextField(vo.getUserName());
+        JTUserName.setEnabled(false);
+        JLGoodsName=new JLabel("商品名",JLabel.CENTER);
+        JTGoodsName=new JTextField(vo.getGoodsName());
+        JTGoodsName.setEnabled(false);
+        JLPrice=new JLabel("兑换价格",JLabel.CENTER);
+        JTPrice = new JTextField(vo.getGoodsPrice()+"");
+        JTPrice.setEnabled(false);
+        JLCTime=new JLabel("创建时间",JLabel.CENTER);
+
+        JTCTime=new JTextField(vo.getCreateDate()+"");
+        JTCTime.setEnabled(false);
+
+        JLETime=new JLabel("完成时间",JLabel.CENTER);
+
+        JTETime=new JTextField(vo.getCompDate()+"");
+        JTETime.setEnabled(false);
+        JLStatus=new JLabel("订单状态",JLabel.CENTER);
+        JTStatus=new JTextField(vo.getOsType());
+        JTStatus.setEnabled(false);
+        JPTable.add(JLNum);
+
+        JPTable.add(JTNum);
+        JPTable.add(JLUserName);
+        JPTable.add(JTUserName);
+        JPTable.add(JLGoodsName);
+        JPTable.add(JTGoodsName);
+        JPTable.add(JLPrice);
+        JPTable.add(JTPrice);
+        JPTable.add(JLCTime);
+        JPTable.add(JTCTime);
+        JPTable.add(JLETime);
+        JPTable.add(JTETime);
+
+        JPTable.add(JLStatus);
+        JPTable.add(JTStatus);
+        butAccomplish = new JButton("完成");
+        butCancel = new JButton("取消");
+
+        butDelete = new JButton("删除");
+        JPBut = new JPanel();
+        JPBut.setSize(100,40);
+        JPBut.setLayout(new GridLayout(1,3));
+        JPBut.add(butAccomplish);
+        JPBut.add(butCancel);
+        JPBut.add(butDelete);
+        this.add(JPTable,BorderLayout.CENTER);
+        this.add(JPBut,BorderLayout.SOUTH);
+
     }
     public void go(){
         this.setVisible(true);//设置dialog显示
-    };
+        butCancel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+                    int ID = Integer.valueOf(vo.getoId());
+                    OrderProcess op = new OrderProcess();
+                    if (op.cancelOrder(ID) == true) {
+
+                        JOptionPane.showMessageDialog(null, "操作成功");
+                    } else {
+
+
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可取消");
+                    }
+                } catch (Exception el) {
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+
+            }
+        });
+
+        butDelete.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //UOrder.this.dispose();
+                try {
+
+
+                    int ID = Integer.valueOf(vo.getoId());
+                    OrderProcess op = new OrderProcess();
+                    if (op.deleteOrder(ID) == true) {
+                        JOptionPane.showMessageDialog(null, "操作成功该订单已删除");
+                        UOdetail.this.dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "操作失败该订单不可删除");
+                    }
+                } catch (Exception el) {
+                    el.printStackTrace();
+                    JOptionPane.showMessageDialog(null,
+                            "请正确操作",
+                            "警告",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+
+    }
 }
 
