@@ -9,12 +9,14 @@ import java.awt.event.ActionListener;
 
 public class UOdetail extends JFrame {
     private VOrderinfId vo;
-
+    private UOrder Uorder;
     private JPanel JPTable,JPBut;
     private JLabel JLNum,JLUserName,JLGoodsName,JLPrice,JLCTime,JLETime,JLStatus;
     private JTextField JTNum,JTUserName,JTGoodsName,JTPrice,JTCTime,JTETime,JTStatus;
     private JButton butDelete,butCancel,butAccomplish;
-    public UOdetail(VOrderinfId vo){
+    public UOdetail(VOrderinfId vo,UOrder Uorder){
+
+        this.Uorder=Uorder;
         this.vo = vo;
         this.setTitle("订单详情");
         this.setLayout(new BorderLayout());
@@ -91,8 +93,11 @@ public class UOdetail extends JFrame {
                     int ID = Integer.valueOf(vo.getoId());
                     OrderProcess op = new OrderProcess();
                     if (op.cancelOrder(ID) == true) {
+                        Uorder.showData();
+
 
                         JOptionPane.showMessageDialog(null, "操作成功");
+                        UOdetail.this.dispose();
                     } else {
 
 
@@ -119,6 +124,7 @@ public class UOdetail extends JFrame {
                     int ID = Integer.valueOf(vo.getoId());
                     OrderProcess op = new OrderProcess();
                     if (op.deleteOrder(ID) == true) {
+                        Uorder.showData();
                         JOptionPane.showMessageDialog(null, "操作成功该订单已删除");
                         UOdetail.this.dispose();
                     } else {

@@ -78,7 +78,7 @@ public class UOrder extends JFrame {
                         int ID = Integer.valueOf(id);
                         OrderInfProcess op = new OrderInfProcess();
                         ;
-                        UOdetail UO = new UOdetail(op.getOrderInfByOId1(ID));
+                        UOdetail UO = new UOdetail(op.getOrderInfByOId1(ID),UOrder.this);
                         UO.go();
                     } catch (Exception el) {
                         JOptionPane.showMessageDialog(null,
