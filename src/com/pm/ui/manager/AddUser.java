@@ -128,10 +128,8 @@ public class AddUser extends JFrame {
     public void findjtext() {
         strname = name.getText().toString();
     }
-
     //获取主窗口属性
     public Object getFrame(){
         return this.frame;
     }
-
 }

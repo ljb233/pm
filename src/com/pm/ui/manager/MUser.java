@@ -21,11 +21,16 @@ import javax.swing.table.DefaultTableModel;
  * 管理员-用户管理-主界面
  *@Auther: linyang
  */
-public class MUser extends JFrame {
+public class MUser {
+    private final int TABLE_HEIGHT = 50;
+    private JFrame jFrame;
     private JPanel pane1;
     private JPanel pane2;
     private JPanel pane3;
+    private JPanel pane4;
+
     private JTable table;
+
     private JButton btnAddpoint;
     private JButton btnAdduser;
     private JButton btnFreezeuser;
@@ -36,22 +41,24 @@ public class MUser extends JFrame {
     private JButton btnNextPageButton;
     private JButton btnPreviousPageButton;
     private JButton btnLastPageButton;
+    private JScrollPane scrollPane;
+
+
     private int currentPage;
-    private int fristPage;
+    private int fristPage = 1;
     private int lastPage;
     private int tableRows;
     private JTextField searchfield;
-    private Object[][] data;
     private List<User> userList;
     private String strname;
     private static final String NORMAL = "正常";
     private static final String FROZEN = "已冻结";
 
     public MUser() {
-        super();
         pane1 = new JPanel();
         pane2 = new JPanel();
         pane3 = new JPanel();
+        pane4 = new JPanel();
 
         searchfield  = new JTextField("输入用户名查找",10);
         searchfield.setFont(new Font("标楷体",Font.TRUETYPE_FONT|Font.ITALIC,12));
@@ -69,14 +76,21 @@ public class MUser extends JFrame {
         pane1.add(searchfield);
         pane1.add(btnSearch);
         //设置表格
-        setBounds(100,100,600,620);
         String[] columnNames = {"ID","用户名","账户状态","积分值"};
-        table = new JTable(data, columnNames);
+        table = new JTable(null,columnNames){
+            //禁止编辑单元格
+            @Override
+            public boolean isCellEditable(int row,int column){
+                return  false;
+            }
+        };
         //创建表格模型 （目的是操作表格）
-        table.setModel(new DefaultTableModel(data, columnNames));    //创建表格并使表格模型与之关联
-        //添加表格到滚动轴
-        JScrollPane scrollpane = new JScrollPane();
-        scrollpane.getViewport().add(table);
+        table.setModel(new DefaultTableModel(null, columnNames));    //创建表格并使表格模型与之关联
+        table.setRowHeight(TABLE_HEIGHT);
+        table.getTableHeader().setReorderingAllowed(false);
+        //不可多选
+        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        scrollPane = new JScrollPane(table);
 
         pane2.add(Box.createGlue()); // 挤占用户管理按钮和窗口左侧空间
         pane2.add(btnAddpoint);
@@ -89,21 +103,28 @@ public class MUser extends JFrame {
         pane2.add(Box.createHorizontalStrut(20));
         pane2.add(btnUpdatepwd);
         pane2.add(Box.createGlue());
-        pane2.add(scrollpane);
 
-        pane3.add(btnFirstPageButton);
-        pane3.add(btnPreviousPageButton);
-        pane3.add(btnNextPageButton);
-        pane3.add(btnLastPageButton);
+        pane3.add(scrollPane);
 
-        add(pane1);
-        add(pane2);
-        add(pane3);
+        jFrame = new JFrame("用户管理");
+        jFrame.setSize(650,
+                580);
+        //使用流式布局
+        jFrame.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));
+        jFrame.setResizable(false);
+        jFrame.setLocationRelativeTo(null);
 
-        setTitle("用户管理界面");// 标题
-        setLayout(new GridLayout(3, 1));
-        setLocationRelativeTo(null);// 窗口居中
-        this.setVisible(true);
+        pane4.add(btnFirstPageButton);
+        pane4.add(btnPreviousPageButton);
+        pane4.add(btnNextPageButton);
+        pane4.add(btnLastPageButton);
+
+        jFrame.add(pane1);
+        jFrame.add(pane2);
+        jFrame.add(pane3);
+        jFrame.add(pane4);
+        jFrame.setVisible(true);
+
     }
     public void findjtext() {
         strname = searchfield.getText().toString();
@@ -129,6 +150,7 @@ public class MUser extends JFrame {
         setUserList();
         initPageNumber();
         ShowData();
+        //监听搜索按钮
         btnSearch.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,7 +183,7 @@ public class MUser extends JFrame {
                 }
             }
         });
-
+        //增加用户
         btnAdduser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -197,7 +219,7 @@ public class MUser extends JFrame {
                 });
             }
         });
-
+        //冻结用户
         btnFreezeuser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -220,7 +242,7 @@ public class MUser extends JFrame {
                 }
             }
         });
-
+        //解冻用户
         btnStopfrzeeuser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -243,7 +265,7 @@ public class MUser extends JFrame {
                 }
             }
         });
-
+        //重置密码
         btnUpdatepwd.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -265,7 +287,7 @@ public class MUser extends JFrame {
                 }
             }
         });
-
+        //增加积分
         btnAddpoint.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -352,7 +374,7 @@ public class MUser extends JFrame {
             }
         });
     }
-
+    //初始化页数
     public void initPageNumber(){
         this.fristPage = 1;
         this.tableRows = 8;
