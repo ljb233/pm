@@ -9,7 +9,7 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "v_orderinf", schema = "pm", catalog = "")
+@Table(name = "v_orderinf", schema = "pm")
 public class VOrderinfId implements Serializable {
     private String userName;
     private byte isFreeze;

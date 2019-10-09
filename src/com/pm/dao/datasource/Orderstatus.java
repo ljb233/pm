@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "t_orderstatus", schema = "pm")
-public class Orderstatus {
+public class  Orderstatus {
     private int id;
     private String osType;
 

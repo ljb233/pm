@@ -2,6 +2,7 @@ package com.pm.dao.factory;
 
 import com.pm.dao.datasource.User;
 import org.hibernate.Session;
+import org.hibernate.engine.spi.SessionDelegatorBaseImpl;
 import org.hibernate.query.Query;
 
 import java.util.List;
@@ -46,7 +47,7 @@ public class UserDAO {
     }
 
     /**
-     * @DO:登录
+     * @TODO:登录
      * @param name
      * @param pwd
      * @return user

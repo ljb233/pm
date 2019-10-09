@@ -173,7 +173,7 @@ public class AddGoods extends JFrame{
 
     /**
      * 文本框的检查，判断输入的数据格式是否都正确
-     * @return ture，正确；false，错误
+     * @return true，正确；false，错误
      */
     private boolean check(){
         goodsId = goodsIdText.getText();

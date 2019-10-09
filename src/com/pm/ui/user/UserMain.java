@@ -2,9 +2,6 @@ package com.pm.ui.user;
 
 import com.pm.dao.datasource.Manager;
 import com.pm.dao.datasource.User;
-import com.pm.ui.manager.MGoods;
-import com.pm.ui.manager.MOrder;
-import com.pm.ui.manager.MUser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,18 +13,18 @@ import java.awt.event.WindowEvent;
 public class UserMain extends JFrame{
 
     private JFrame mainFrame;
-    private JButton mUserButton;
-    private JButton mOrderButton;
-    private JButton mGoodsButton;
+    private JButton uUserButton;
+    private JButton uOrderButton;
+    //private JButton uGoodsButton;
     public Manager manager;
     public User user = null;
 
 
     public UserMain(User user){
         this.user = user;
-        mUserButton = new JButton("个人信息");
-        mOrderButton = new JButton("个人订单");
-        mGoodsButton = new JButton("商品管理");
+        uUserButton = new JButton("修改密码");
+        uOrderButton = new JButton("个人订单");
+        //uGoodsButton = new JButton("商品兑换");
 
         mainFrame = new JFrame(user.getUserName()+"");
         mainFrame.setSize(300,200);
@@ -42,30 +39,30 @@ public class UserMain extends JFrame{
 
         //添加组件
 
-        mainFrame.add(mUserButton);
-        mainFrame.add(mGoodsButton);
-        mainFrame.add(mOrderButton);
+        mainFrame.add(uUserButton);
+        //mainFrame.add(uGoodsButton);
+        mainFrame.add(uOrderButton);
         mainFrame.setVisible(true);
     }
 
     public void go(){
-        mUserButton.addActionListener(new ActionListener() {
+        uUserButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MUser mUser = new MUser();
-                mUser.go();
+                //EditPwd editPwd = new EditPwd(user);
+                //uChangePwd.go();
             }
         });
 
-        mGoodsButton.addActionListener(new ActionListener() {
+      /* uGoodsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MGoods mGoods = new MGoods();
-                mGoods.go();
+                UOdetail uOdetail = new UOdetail(user);
+                uOdetail.go();
             }
-        });
+        });*/
 
-        mOrderButton.addActionListener(new ActionListener() {
+        uOrderButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 UOrder uOrder = new UOrder(user);
