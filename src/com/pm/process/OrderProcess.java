@@ -1,6 +1,8 @@
 package com.pm.process;
 
+import com.pm.dao.datasource.Integral;
 import com.pm.dao.datasource.Order;
+import com.pm.dao.datasource.User;
 import com.pm.dao.datasource.VOrderinfId;
 import com.pm.dao.factory.ManagerDAO;
 import com.pm.dao.factory.OrderDAO;
@@ -151,5 +153,13 @@ public class OrderProcess {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+    public void addOrder(Order order ) {
+
+        org.hibernate.Transaction transaction = session.beginTransaction();
+        System.out.println(order);
+        orderDAO.addOrder(order);
+            transaction.commit();
+
     }
 }

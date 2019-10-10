@@ -23,13 +23,9 @@ public class PointProcess {
         pointDao = new PointDao(session);
         userDAO = new UserDAO(session);
     }
-
-    /**
-     * 积分增加处理
-     * @param addValue
-     * @param id
-     * @return boolean
-     */
+    public Point getPointByUserId(int userId){
+        return pointDao.getPointByID(userId);
+    }
     public boolean addPoints(int addValue, int id) {
         Transaction transaction = session.beginTransaction();
         try {
@@ -71,5 +67,8 @@ public class PointProcess {
             e.printStackTrace();
             return Integer.parseInt(null);
         }
+    }
+
+    public void addpoints(int i, int id) {
     }
 }
