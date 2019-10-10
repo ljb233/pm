@@ -13,6 +13,9 @@ public class OrderDAO {
     public OrderDAO(Session session){
         this.session = session;
     }
+    public void addOrder(Order order){
+        session.save(order) ;
+    }
     public List<Order>getAllOrder(){
         Query<Order>query = session.createQuery("from Order",Order.class);
         return query.getResultList();

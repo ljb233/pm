@@ -1,6 +1,8 @@
 package com.pm.process;
 
+import com.pm.dao.datasource.Integral;
 import com.pm.dao.datasource.Order;
+import com.pm.dao.datasource.User;
 import com.pm.dao.datasource.VOrderinfId;
 import com.pm.dao.factory.ManagerDAO;
 import com.pm.dao.factory.OrderDAO;
@@ -82,6 +84,28 @@ public class OrderProcess {
 
     }
 
+    //完成订单。
+
+    public boolean accomplishOrder(int orderId) {
+        org.hibernate.Transaction tx = session.beginTransaction();
+        try {
+            int status = orderDAO.getOrderById(orderId).getOsId();
+            if (status != 2)
+
+                return false;
+            else {
+                orderDAO.updateOrderStatus(orderId, 3);
+                tx.commit();
+                return true;
+            }
+        } catch (Exception e) {
+            tx.rollback();
+            System.out.println(e.getMessage());
+            return false;
+        }
+
+    }
+
     //删除订单
     public boolean deleteOrder(int orderId) {
         org.hibernate.Transaction tx = session.beginTransaction();
@@ -129,5 +153,13 @@ public class OrderProcess {
             System.out.println(e.getMessage());
             return false;
         }
+    }
+    public void addOrder(Order order ) {
+
+        org.hibernate.Transaction transaction = session.beginTransaction();
+        System.out.println(order);
+        orderDAO.addOrder(order);
+            transaction.commit();
+
     }
 }

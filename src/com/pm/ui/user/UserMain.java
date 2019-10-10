@@ -20,6 +20,7 @@ import java.awt.*;
 import java.sql.Blob;
 import java.sql.SQLException;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
@@ -168,9 +169,9 @@ public class UserMain {
         });
         //首页按钮的监听器，点击后设置首页并刷新table
         jButton.addActionListener(e -> {
+
             String id = jTextField.getText();
             Order order = new Order();
-            order.setOrderId(UUID.randomUUID().toString());
             order.setCreateDate(new Date());
             order.setCompDate(new Date());
             order.setUserId(user.getId());
@@ -178,6 +179,15 @@ public class UserMain {
             order.setId(new Random().nextInt(100000));
             order.setgId(Integer.parseInt(id));
             Goods goods = goodsProcess.getGoods(Integer.parseInt(id));
+
+            //生成订单编号为：日期＋时间＋该商品编号后四位
+            String goodsId = goods.getGoodsId();
+
+            Date d = new Date();
+            SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+            String cc = sdf.format(d);
+            order.setOrderId(cc + goodsId.substring(goodsId.length() - 4));
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -185,7 +195,7 @@ public class UserMain {
                 }
             }).start();
 
-            pointProcess.maddpoints(-goods.getGoodsPrice(),user.getId());
+            pointProcess.addpoints(-goods.getGoodsPrice(),user.getId());
             pointProcess = new PointProcess();
             new Thread(new Runnable() {
                 @Override
@@ -197,7 +207,7 @@ public class UserMain {
         });
         //签到监听器
         signIn.addActionListener(e -> {
-            pointProcess.maddpoints(20,user.getId());
+            pointProcess.addpoints(20,user.getId());
             pointProcess = new PointProcess();
             new Thread(new Runnable() {
                 @Override

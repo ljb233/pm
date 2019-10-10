@@ -1,7 +1,9 @@
 package com.pm.dao.datasource;
 
+import java.util.Date;
+
 import javax.persistence.*;
-import java.sql.Date;
+//import java.sql.Date;
 import java.util.Objects;
 
 @Entity
@@ -102,5 +104,18 @@ public class Order {
     @Override
     public int hashCode() {
         return Objects.hash(id, orderId, createDate, compDate, osId, gId, userId);
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", orderId='" + orderId + '\'' +
+                ", createDate=" + createDate +
+                ", compDate=" + compDate +
+                ", osId=" + osId +
+                ", gId=" + gId +
+                ", userId=" + userId +
+                '}';
     }
 }
