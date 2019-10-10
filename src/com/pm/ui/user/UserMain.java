@@ -8,7 +8,7 @@ import com.pm.dao.datasource.User;
 import com.pm.process.GoodsProcess;
 import com.pm.process.IntegralProcess;
 import com.pm.process.OrderProcess;
-import com.pm.process.PointProcess;
+import com.pm.process.*;
 import com.pm.util.Page;
 
 import javax.swing.*;
@@ -17,6 +17,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.Blob;
 import java.sql.SQLException;
 
@@ -218,6 +220,13 @@ public class UserMain {
             }).start();
             signIn.setEnabled(false);
 
+        });
+        personalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                UOrder uOrder = new UOrder(user);
+                uOrder.go();
+            }
         });
         //上一页按钮的监听器
         previousPageButton.addActionListener(e -> {

@@ -82,6 +82,7 @@ public class UOdetail extends JFrame {
         this.add(JPTable,BorderLayout.CENTER);
         this.add(JPBut,BorderLayout.SOUTH);
 
+        this.setLocationRelativeTo(null);
     }
     public void go(){
         this.setVisible(true);//设置dialog显示
