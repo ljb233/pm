@@ -69,6 +69,19 @@ public class PointProcess {
         }
     }
 
-    public void addpoints(int i, int id) {
+    public void addpoints(int addValue, int id) {
+        Transaction transaction = session.beginTransaction();
+        try {
+            int orgValue = 0;
+            orgValue = pointDao.getPointByID(id).getPointValue();
+            int updatetotal = addValue + orgValue;
+            pointDao.addPoints(updatetotal,id);
+            transaction.commit();
+
+        } catch (Exception e) {
+            transaction.rollback();
+            System.out.println(e.getMessage());
+        }
     }
+
 }
