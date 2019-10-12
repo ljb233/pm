@@ -259,7 +259,6 @@ public class UOrder extends JFrame {
                 v.add(order.getGoodsName());
                 v.add(order.getOsType());
                 defaultTableModel.addRow(v);
-                defaultTableModel.addRow(v);
             }
         }
 
